@@ -27,7 +27,10 @@
         </v-list-item-content>
 
         <v-list-item-action>
-          <v-btn icon @click="itemBtn(item)">
+          <v-btn v-if="item.val === 0" icon @click="itemBtn(item)">
+            签到
+          </v-btn>
+          <v-btn v-if="item.val !== 0" icon @click="itemBtn(item)">
             <v-icon color="grey lighten-1">mdi-information</v-icon>
           </v-btn>
         </v-list-item-action>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>{{ person }}</div>
-<v-form
+    <v-form
       ref="form"
       v-model="valid"
       lazy-validation

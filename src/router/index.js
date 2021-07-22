@@ -16,6 +16,7 @@ import addAddress from '../views/person/address/addAddress.vue'
 import adward from '../views/person/adward/adward.vue'
 // 主页
 import ngs from '../views/ngs/index.vue'
+import gua from '../views/ngs/choujiang/gua.vue'
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,12 @@ const routes = [
         path: '/home/ngs',
         name: 'Ngs',
         component: ngs
+      },
+      // 抽奖页面
+      {
+        path: '/home/gua',
+        name: 'Gua',
+        component: gua
       },
       // 地址管理
       {

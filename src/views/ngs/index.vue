@@ -66,6 +66,7 @@
         <div class="pointer" @click="startC">开始抽奖</div>
       </div>
     </div> -->
+    <v-btn @click="guaBtn">点我跳转刮刮卡</v-btn>
 
     <div @click="vm.showDialog = true">点我打开Dialog</div>
     <div class="dialogDiv" v-if="vm.showDialog">
@@ -116,6 +117,12 @@ export default {
     '$route': 'fetchData'
   },
   methods: {
+    // 跳转刮刮卡
+    guaBtn() {
+      this.$router.push({
+        path: '/home/gua'
+      })
+    },
     closeBtn(){
       this.vm.showDialog = false;
     },
@@ -186,7 +193,7 @@ export default {
 </style>
 
 <style>
-    .wrapper {
+    /* .wrapper {
       position: relative;
       height: 300px;
       width: 300px;
@@ -293,7 +300,6 @@ export default {
     }
 
 
-  /* 对话框 */
   .dialogDiv{
     z-index: 15;
     position: fixed;
@@ -320,7 +326,6 @@ export default {
     margin-right: 5px;
     margin-top: 5px;
     cursor: pointer;
-    /* background-image: url(../../assets/close.png); */
     background-size: cover;
     background-repeat: no-repeat;
   }
@@ -334,6 +339,6 @@ export default {
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-  }
+  } */
 </style>
 
