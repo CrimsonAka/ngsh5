@@ -47,7 +47,7 @@
     data: () => ({
       // 测试数据
       items: [
-        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '个人信息', subtitle: '积分：100', val: 0 },
+        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '个人信息', subtitle: '积分：100, 次数：5', val: 0 },
         { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖记录', subtitle: '', val: 1 },
         { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '地址管理', subtitle: '', val: 2 },
       ],

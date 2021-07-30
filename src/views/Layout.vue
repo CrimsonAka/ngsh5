@@ -23,7 +23,6 @@
         grow
         shift
         fixed
-        
       >
         <v-btn value="home" @click="ngsBtn">
           <span>首页</span>

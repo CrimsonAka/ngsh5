@@ -17,7 +17,7 @@
 
         <v-list-item-content>
           <v-list-item-title v-text="item.title"></v-list-item-title>
-          <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
+          <v-list-item-subtitle>{{item.subtitle}}  {{item.thirdtitle}}</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-action>
@@ -38,13 +38,12 @@
     data: () => ({
       // 测试数据
       items: [
-        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖1', subtitle: '' },
-        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖2', subtitle: '' },
-        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖3', subtitle: '' },
+        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖1', subtitle: '123', thirdtitle: '321' },
+        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖2', subtitle: '456', thirdtitle: '654' },
+        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖3', subtitle: '789', thirdtitle: '987' },
       ],
       // 
       person: '个人信息',
-
       // 获取本地数据
       userMsg: {}
     }),

@@ -18,6 +18,12 @@ import adward from '../views/person/adward/adward.vue'
 import ngs from '../views/ngs/index.vue'
 import gua from '../views/ngs/choujiang/gua.vue'
 
+
+// 管理页面
+// 主页面
+import maLayout from '../views/management/maLayout.vue'
+
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -91,6 +97,20 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
+  },
+
+  // 管理端页面 
+  {
+    path: '/management',
+    name: 'management',
+    component: maLayout,
+    children: [
+      {
+        path: '/management/person',
+        name: 'Person',
+        component: person
+      }
+    ]
   }
 ]
 

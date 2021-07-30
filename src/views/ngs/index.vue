@@ -76,10 +76,10 @@
       </div>
     </div>
 
-      <div class="modal-header">
-        <h3>custom header</h3>
-        <v-btn>点击按钮--开始</v-btn>
-      </div>
+    <div class="modal-header">
+      <h3>custom header</h3>
+      <v-btn>点击按钮--开始</v-btn>
+    </div>
   </div>
 </template>
 
