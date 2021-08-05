@@ -20,9 +20,8 @@ import gua from '../views/ngs/choujiang/gua.vue'
 
 
 // 管理页面
-// 主页面
 import maLayout from '../views/management/maLayout.vue'
-
+import addActivity from '../views/management/pro/addActivity.vue'
 
 Vue.use(VueRouter)
 
@@ -109,6 +108,11 @@ const routes = [
         path: '/management/person',
         name: 'Person',
         component: person
+      },
+      {
+        path: '/management/addactivity',
+        name: 'addActivity',
+        component: addActivity
       }
     ]
   }
