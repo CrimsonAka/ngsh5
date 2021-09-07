@@ -121,6 +121,7 @@ import {
           postcode: '',
           userId: ''
         }
+        console.log(data)
       },
     }
 
