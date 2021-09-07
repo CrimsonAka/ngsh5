@@ -16,36 +16,72 @@
 
       <v-row class="ml-1 mb-3">
         <v-checkbox
-          v-model="ex4"
+          v-model="lotteryDisplay"
           label="转盘"
           color="orange"
-          value="orange"
+          value="1"
           hide-details
         ></v-checkbox>
         <v-checkbox
-          v-model="ex4"
+          v-model="lotteryDisplay"
           label="寻宝"
           color="orange darken-3"
-          value="orange darken-3"
+          value="2"
           hide-details
           class="ml-5"
         ></v-checkbox>
         <v-checkbox
-          v-model="ex4"
+          v-model="lotteryDisplay"
           label="刮刮乐"
           color="orange darken-6"
-          value="orange darken-6"
+          value="3"
           hide-details
           class="ml-5"
         ></v-checkbox>
       </v-row>
 
+      <v-row class="ml-1 mb-3">
+        <v-checkbox
+          v-model="channelCode"
+          label="ngs"
+          color="orange"
+          value="0"
+          hide-details
+        ></v-checkbox>
+        <v-checkbox
+          v-model="channelCode"
+          label="ngsplaza"
+          color="orange darken-3"
+          value="1"
+          hide-details
+          class="ml-5"
+        ></v-checkbox>
+        <v-checkbox
+          v-model="channelCode"
+          label="alldays"
+          color="orange darken-6"
+          value="2"
+          hide-details
+          class="ml-5"
+        ></v-checkbox>
+      </v-row>
+
+      <!-- color -->
+      <!-- <div>
+        <v-checkbox>选择活动颜色</v-checkbox>
+      </div> -->
+
+      <!-- 添加奖品列表 -->
       <v-data-table
         :headers="headers"
         :items="desserts"
         :sort-by="['index']"
         :sort-desc="[false, true]"
         multi-sort
+        :single-expand="singleExpand"
+        :expanded.sync="expanded"
+        item-key="level"
+        show-expand
         class="elevation-1 mb-3"
       >
         <template v-slot:top>
@@ -74,23 +110,21 @@
   
                 <v-card-text>
                   <v-container>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.level" label="奖励等级"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.acid" label="奖励名称"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-file-input v-model="editedItem.fat" small-chips multiple label="图片"></v-file-input>
-                      </v-col>
-                      <!-- <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                      </v-col> -->
-                    </v-row>
+                    <v-col>
+                      <v-text-field v-model="editedItem.level" label="奖励等级"></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field v-model="editedItem.acid" label="奖励名称"></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field v-model="editedItem.carbs" label="概率"></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-file-input v-model="editedItem.fat" small-chips multiple label="图片"></v-file-input>
+                    </v-col>
+                    <!-- <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                    </v-col> -->
                   </v-container>
                 </v-card-text>
   
@@ -120,6 +154,9 @@
         </template>
         <template v-slot:no-data>
           <v-btn color="primary" @click="initialize">Reset</v-btn>
+        </template>
+        <template v-slot:expanded-item="{ headers, item }">
+          <td :colspan="headers.length">More info about {{ item.level }}</td>
         </template>
       </v-data-table>
   
@@ -191,9 +228,9 @@
           // sortable: false,
           value: 'level'
         },
+        { text: '概率', value: 'carbs' },
         { text: '奖励名称', value: 'acid' },
         { text: '图片', value: 'fat' },
-        // { text: 'Carbs (g)', value: 'carbs' },
         // { text: 'Protein (g)', value: 'protein' },
         { text: '操作', value: 'actions', sortable: false },
       ],
@@ -213,7 +250,12 @@
         fat: 0,
         carbs: 0,
         protein: 0,
+        index: 0
       },
+      expanded: [],
+      singleExpand: true,
+      lotteryDisplay: 1,
+      channelCode: 0
     }),
 
     created() {
@@ -222,7 +264,7 @@
     },
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === -1 ? '添加' : '修改'
       },
     },
 
@@ -271,12 +313,12 @@
             index: 1
           },
           {
-            level: '二等奖',
+            level: '三等奖',
             acid: 999,
             // fat: 9.0,
             // carbs: 37,
             // protein: 4.3,
-            index: 2
+            index: 3
           },
         ]
       },

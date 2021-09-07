@@ -203,7 +203,7 @@
       ],
       photosmenu: [
         { subtitle: '添加活动', id: 'addActivity' },
-        { subtitle: '活动管理' },
+        { subtitle: '活动管理', id: 'manageActivity' },
         { subtitle: '奖品管理' }
       ],
       aboutmenu: [

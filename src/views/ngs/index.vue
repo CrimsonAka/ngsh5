@@ -1,71 +1,61 @@
 <template>
   <div id="app">
-    <div>msg: {{ msg }}</div>
-    <div>id: {{ personid }}</div>
-    <div>phone: {{ userMsg.phone }}</div>
-    <v-btn @click="getRandom">获取随机数</v-btn>
-    <div>{{ randomNum2 }}</div>
-    <div>{{ randomMsg }}</div>
-    <div>{{ randomNum }}</div>
-    <div>{{ addward }}</div>
+    <v-row dense class="mt-10">
+      <v-col cols="12">
+        <v-card
+          color="#385F73"
+          dark
+        >
+          <v-card-title class="headline">活动list</v-card-title>
 
-    <router-link to="/">返回</router-link>
+          <!-- <v-card-subtitle>选择活动</v-card-subtitle> -->
 
-    <!-- <div class="wrapper" id='pointer'>
-      <div class="panel">
-        <div class="sector">
-          <div class="sector-inner">
-            <span>谢谢参与</span>
+          <!-- <v-card-actions>
+            <v-btn text>XXXXX</v-btn>
+          </v-card-actions> -->
+        </v-card>
+      </v-col>
+
+      <v-col
+        v-for="(item, i) in items"
+        :key="i"
+        cols="12"
+      >
+        <v-card
+          :color="item.color"
+          dark
+          @click="activityBtn(item)"
+        >
+          <div class="d-flex flex-no-wrap justify-space-between">
+            <div>
+              <v-card-title
+                class="headline"
+                v-text="item.title"
+              ></v-card-title>
+
+              <v-card-subtitle style="font-size:14px;">次数：{{item.cishu}}</v-card-subtitle>
+              <v-card-actions>
+                <v-btn :elevation="4" text>兑换</v-btn>
+              </v-card-actions>
+            </div>
+
+            <v-avatar
+              class="ma-3"
+              size="125"
+              tile
+            >
+              <v-img :src="item.src"></v-img>
+            </v-avatar>
           </div>
-        </div>
-        <div class="sector">
-          <div class="sector-inner">
-            <span> 50 积分</span>
-          </div>
-        </div>
-        <div class="sector">
-          <div class="sector-inner">
-            <span>谢谢参与</span>
-          </div>
-        </div>
-        <div class="sector">
-          <div class="sector-inner">
-            <span>100话费</span>
-          </div>
-        </div>
-        <div class="sector">
-          <div class="sector-inner">
-            <span> 50 积分</span>
-          </div>
-        </div>
-        <div class="sector">
-          <div class="sector-inner">
-            <span>谢谢参与</span>
-          </div>
-        </div>
-        <div class="sector">
-          <div class="sector-inner">
-            <span>100话费</span>
-          </div>
-        </div>
-        <div class="sector">
-          <div class="sector-inner">
-            <span>谢谢参与</span>
-          </div>
-        </div>
-        <div class="sector">
-          <div class="sector-inner">
-            <span> 50 积分</span>
-          </div>
-        </div>
-        <div class="sector">
-          <div class="sector-inner">
-            <span>10元话费</span>
-          </div>
-        </div>
-        <div class="pointer" @click="startC">开始抽奖</div>
-      </div>
-    </div> -->
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-btn @click="getUserinfo">获取用户信息</v-btn>
+    <v-btn @click="deleteUserBtn">删除用户信息</v-btn>
+    <v-btn @click="getToken">获取token</v-btn>
+
+    <!-- <router-link to="/">返回</router-link>
+
     <v-btn @click="guaBtn">点我跳转刮刮卡</v-btn>
 
     <div @click="vm.showDialog = true">点我打开Dialog</div>
@@ -79,11 +69,74 @@
     <div class="modal-header">
       <h3>custom header</h3>
       <v-btn>点击按钮--开始</v-btn>
-    </div>
+    </div> -->
+
+    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-card>
+        <v-toolbar dark :color="msg.color">
+          <v-btn icon dark @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-list three-line subheader>
+          <v-subheader>活动详情</v-subheader>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>{{ msg.title }}</v-list-item-title>
+              <v-list-item-subtitle>{{ msg.subtitle }}</v-list-item-subtitle>
+              <v-list-item-subtitle>可抽奖次数：{{ msg.cishu }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-btn style="margin:10px 10vw; color:white;" width="80vw" :color="msg.color">抽奖</v-btn>
+          <v-divider></v-divider>
+          <v-img :src="msg.src"></v-img>
+        </v-list>
+        
+        <!-- <v-list three-line subheader>
+          <v-subheader>General</v-subheader>
+          <v-list-item>
+            <v-list-item-action>
+              <v-checkbox v-model="notifications"></v-checkbox>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Notifications</v-list-item-title>
+              <v-list-item-subtitle>Notify me about updates to apps or games that I downloaded</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-action>
+              <v-checkbox v-model="sound"></v-checkbox>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Sound</v-list-item-title>
+              <v-list-item-subtitle>Auto-update apps at any time. Data charges may apply</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-action>
+              <v-checkbox v-model="widgets"></v-checkbox>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Auto-add widgets</v-list-item-title>
+              <v-list-item-subtitle>Automatically add home screen widgets</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list> -->
+      </v-card>
+    </v-dialog>
+
+
   </div>
 </template>
 
 <script>
+import {
+  getuserid, // 获取用户id
+  getActivityAvailable, // 获取活动列表  GetActivityAvailable
+  getUser, // 获取用户信息
+  deleteUser
+} from '../../api/module/backend'
+import dayjs from 'dayjs'
 export default {
   name: 'Playngs',
   data: () => ({
@@ -99,17 +152,40 @@ export default {
         { id: 4, name: '记事本', shu:10, weight: 10 },
       ],
       addward: '',
-      msg: 'ngs抽奖页面',
       personid: '',
       randomNum: 0,
       randomNum2: 0,
-      randomMsg: ''
+      randomMsg: '',
+      items: [
+        {
+          color: '#1F7087',
+          src: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg',
+          title: '活动1',
+          subtitle: '转盘',
+          content: '',
+          cishu: '1'
+        },
+        {
+          color: '#952175',
+          src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
+          title: '活动2',
+          subtitle: '刮刮卡',
+          content: '',
+          cishu: '2'
+        },
+      ],
+      dialog: false,
+      notifications: false,
+      sound: true,
+      widgets: false,
+      msg: {},
   }),
   created () {
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
     this.fetchData()
     this.getLS()
+    this.getActAvailable()
     // this.getAdward()
   },
   watch: {
@@ -117,6 +193,24 @@ export default {
     '$route': 'fetchData'
   },
   methods: {
+    // 删除用户
+    deleteUserBtn() {
+      let user = localStorage.getItem('user')
+      user = JSON.parse(user)
+      let userId = {
+        id: user.userId
+      }
+      console.log(userId)
+      deleteUser(userId).then(res => {
+        console.log(res)
+      })
+    },
+    // 活动详情
+    activityBtn(val) {
+      console.log(val)
+      this.dialog = true
+      this.msg = val
+    },
     // 跳转刮刮卡
     guaBtn() {
       this.$router.push({
@@ -145,7 +239,46 @@ export default {
 
     // 获取localstorage信息
     getLS() {
-      this.userMsg = JSON.parse(localStorage.getItem('user'))
+      getuserid().then(res => {
+        if (res) {
+          console.log(res)
+          let info = {
+            userId: res.data.sub
+          }
+          info = JSON.stringify(info)
+          localStorage.setItem('user', info)
+        } else {
+          console.log('刷新')
+        }
+      })
+    },
+
+    // 获取活动列表
+    getActAvailable() {
+      let dj = dayjs().format('YYYY-MM-DD')
+      let data = {
+        startTime: dj,
+        AvailableChannels: ['Ngs']
+      }
+      data = JSON.stringify(data)
+      data = JSON.parse(data)
+      console.log(data)
+      getActivityAvailable(data).then(res => {
+        console.log(res)
+      })
+    },
+
+    // 获取用户信息
+    getUserinfo() {
+      let user = localStorage.getItem('user')
+      user = JSON.parse(user)
+      let userId = {
+        id: user.userId
+      }
+      console.log(userId)
+      getUser(userId).then(res => {
+        console.log(res)
+      })
     },
     // 计算中奖物品
     getAdward() {
@@ -190,155 +323,5 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-</style>
-
-<style>
-    /* .wrapper {
-      position: relative;
-      height: 300px;
-      width: 300px;
-      padding: 20px;
-      margin: 20px;
-      background-color: #c0381f;
-      box-shadow: #000000 0px 0px 10px;
-      border-radius: 50%;
-    }
-    .panel {
-      position: relative;
-      height: 200px;
-      width: 200px;
-      background-color: #b7b7b7;
-      border-radius: 100px;
-    }
-    .sector {
-      position: absolute;
-      width: 100px;
-      height: 200px;
-      border-radius: 0px 100px 100px 0;
-      overflow: hidden;
-      left: 100px;
-      top: 0px;
-      transform-origin: left center;
-    }
-    .sector:nth-child(1) {
-      transform: rotate(-18deg);
-    }
-    .sector:nth-child(2) {
-      transform: rotate(18deg);
-    }
-    .sector:nth-child(3) {
-      transform: rotate(54deg);
-    }
-    .sector:nth-child(4) {
-      transform: rotate(90deg);
-    }
-    .sector:nth-child(5) {
-      transform: rotate(126deg);
-    }
-    .sector:nth-child(6) {
-      transform: rotate(162deg);
-    }
-    .sector:nth-child(7) {
-      transform: rotate(198deg);
-    }
-    .sector:nth-child(8) {
-      transform: rotate(234deg);
-    }
-    .sector:nth-child(9) {
-      transform: rotate(270deg);
-    }
-    .sector:nth-child(10) {
-      transform: rotate(306deg);
-    }
-    .sector:nth-child(2n+1) .sector-inner {
-      background: #fef6e0;
-    }
-    .sector:nth-child(2n) .sector-inner {
-      background: #ffffff;
-    }
-    .sector-inner {
-      text-align: center;
-      display: block;
-      width: 40px;
-      padding: 5px 3px 0 57px;
-      height: 195px;
-      transform: translateX(-100px) rotate(36deg);
-      transform-origin: right center;
-      border-radius: 100px 0 0 100px;
-    }
-    .sector-inner span {
-      display: block;
-      transform-origin: center;
-      transform: rotate(-19deg);
-      color: #d46854;
-    }
-    .pointer {
-      position: absolute;
-      left: 79px;
-      top: 79px;
-      z-index: 10;
-      height: 30px;
-      width: 30px;
-      padding: 6px;
-      color: #fff899;
-      line-height: 15px;
-      font-size: 12px;
-      text-align: center;
-      background-color: #dc5b5b;
-      border-radius: 50%;
-      border: 1px solid #c0381f;
-    }
-    .pointer::after {
-      content: '';
-      position: absolute;
-      left: 14px;
-      top: -24px;
-      border-width: 12px 6px;
-      border-style: solid;
-      border-color: transparent;
-      border-bottom-color: #c0381f;
-    }
-
-
-  .dialogDiv{
-    z-index: 15;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: rgba(0,0,0,0.3);
-    width: 100%;
-    height: 100%;
-  }
-  .message{
-    background-color: #ff5350;
-    text-align: center; 
-    width: 40%;
-    height: 40%;
-    position: relative;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-  }
-  .closeImg{
-    width: 20px;
-    height: 20px;
-    float: right;
-    margin-right: 5px;
-    margin-top: 5px;
-    cursor: pointer;
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-  .borderDiv{
-    text-align: center;
-    background-color: white;
-    border-radius: 20px;
-    width: 40%;
-    height: 40%;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-  } */
 </style>
 

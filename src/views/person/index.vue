@@ -65,7 +65,7 @@
     methods: {
       // 判断是否登录
       ifLogin() {
-        this.userMsg = JSON.parse(localStorage.getItem('ngs'))
+        this.userMsg = JSON.parse(localStorage.getItem('token'))
         // console.log(this.userMsg)
         if(!this.userMsg) {
           this.userMsg = {}

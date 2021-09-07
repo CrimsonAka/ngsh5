@@ -9,22 +9,19 @@
       <v-text-field
         v-model="name"
         :counter="10"
-        :rules="nameRules"
         label="姓名"
         required
       ></v-text-field>
   
       <v-text-field
-        v-model="email"
-        :rules="emailRules"
+        v-model="phone"
         label="电话号码"
         required
       ></v-text-field>
   
       <v-select
-        v-model="select"
+        v-model="address"
         :items="items"
-        :rules="[v => !!v || 'Item is required']"
         label="地区"
         required
       ></v-select>
@@ -64,6 +61,9 @@
 </template>
 
 <script>
+import {
+  // addAddress, // 添加新地址
+} from '../../../api/module/backend'
   export default {
     name: 'Address',
 
@@ -79,12 +79,12 @@
         // v => !!v || 'Name is required',
         // v => (v && v.length <= 10) || 'Name must be less than 10 characters',
       ],
-      email: '',
-      emailRules: [
+      phone: '',
+      phoneRules: [
         // v => !!v || 'E-mail is required',
         // v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
-      select: null,
+      address: null,
       items: [
         'Item 1',
         'Item 2',
@@ -107,6 +107,20 @@
       },
       resetValidation () {
         this.$refs.form.resetValidation()
+      },
+
+      // 添加地址
+      addBtn() {
+        let data = {
+          recipient: '',
+          recipientPhoneNumber: '',
+          country: '',
+          province: '',
+          city: '',
+          detailedAddress: '',
+          postcode: '',
+          userId: ''
+        }
       },
     }
 
