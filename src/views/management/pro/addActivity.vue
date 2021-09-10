@@ -8,25 +8,51 @@
     >
       <v-text-field
         v-model="name"
-        :counter="10"
-        :rules="nameRules"
         label="活动名称"
         required
       ></v-text-field>
 
+      <v-subheader>活动类型：</v-subheader>
+      <v-row class="ml-1 mb-3">
+        <v-checkbox
+          v-model="activityType"
+          label="抽奖活动"
+          color="orange"
+          value="Lottery"
+          hide-details
+        ></v-checkbox>
+        <v-checkbox
+          v-model="activityType"
+          label="签到活动"
+          color="orange darken-3"
+          value="SingleAttendance"
+          hide-details
+          class="ml-5"
+        ></v-checkbox>
+        <v-checkbox
+          v-model="activityType"
+          label="连续签到活动"
+          color="orange darken-6"
+          value="SequentialAttendance"
+          hide-details
+          class="ml-5"
+        ></v-checkbox>
+      </v-row>
+
+      <div v-show="this.activityType === 'Lottery'">
       <v-row class="ml-1 mb-3">
         <v-checkbox
           v-model="lotteryDisplay"
           label="转盘"
           color="orange"
-          value="1"
+          value="Roulette"
           hide-details
         ></v-checkbox>
         <v-checkbox
           v-model="lotteryDisplay"
           label="寻宝"
           color="orange darken-3"
-          value="2"
+          value="Digging"
           hide-details
           class="ml-5"
         ></v-checkbox>
@@ -34,36 +60,113 @@
           v-model="lotteryDisplay"
           label="刮刮乐"
           color="orange darken-6"
-          value="3"
+          value="Scratchcard"
+          hide-details
+          class="ml-5"
+        ></v-checkbox>
+      </v-row>
+      </div>
+
+      <v-subheader >活动渠道：</v-subheader>
+      <v-row class="ml-1 mb-3">
+        <v-checkbox
+          v-model="availableChannels"
+          label="ngs"
+          color="orange"
+          value="ngs"
+          hide-details
+        ></v-checkbox>
+        <v-checkbox
+          v-model="availableChannels"
+          label="ngsplaza"
+          color="orange darken-3"
+          value="ngsplaza"
+          hide-details
+          class="ml-5"
+        ></v-checkbox>
+        <v-checkbox
+          v-model="availableChannels"
+          label="alldays"
+          color="orange darken-6"
+          value="alldays"
           hide-details
           class="ml-5"
         ></v-checkbox>
       </v-row>
 
+      <v-subheader >时间设置：</v-subheader>
       <v-row class="ml-1 mb-3">
         <v-checkbox
-          v-model="channelCode"
-          label="ngs"
+          v-model="timeType"
+          label="开始时间"
           color="orange"
-          value="0"
+          value="st"
           hide-details
         ></v-checkbox>
         <v-checkbox
-          v-model="channelCode"
-          label="ngsplaza"
+          v-model="timeType"
+          label="开始时间-结束时间"
           color="orange darken-3"
-          value="1"
+          value="st-et"
           hide-details
           class="ml-5"
         ></v-checkbox>
-        <v-checkbox
-          v-model="channelCode"
-          label="alldays"
-          color="orange darken-6"
-          value="2"
-          hide-details
-          class="ml-5"
-        ></v-checkbox>
+      </v-row>
+      <v-row class="ml-1 mb-3">
+      <v-col cols="12" sm="6" md="4" v-show="this.timeType === 'st' || 'st-et'">
+        <v-menu
+          ref="menu"
+          v-model="menu"
+          :close-on-content-click="false"
+          :return-value.sync="startTime"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="startTime"
+              label="活动开始时间"
+              prepend-icon="mdi-calendar-blank"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker v-model="startTime" no-title scrollable>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+            <v-btn text color="primary" @click="$refs.menu.save(startTime)">OK</v-btn>
+          </v-date-picker>
+        </v-menu>
+      </v-col>
+      <v-col cols="12" sm="6" md="4" v-show="this.timeType === 'st-et'">
+        <v-menu
+          ref="menu2"
+          v-model="menu2"
+          :close-on-content-click="false"
+          :return-value.sync="endTime"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="endTime"
+              label="活动结束时间"
+              prepend-icon="mdi-calendar-blank"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker v-model="endTime" no-title scrollable>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="menu2 = false">Cancel</v-btn>
+            <v-btn text color="primary" @click="$refs.menu2.save(endTime)">OK</v-btn>
+          </v-date-picker>
+        </v-menu>
+      </v-col>
       </v-row>
 
       <!-- color -->
@@ -71,8 +174,9 @@
         <v-checkbox>选择活动颜色</v-checkbox>
       </div> -->
 
-      <!-- 添加奖品列表 -->
-      <v-data-table
+
+      <!-- 列表 -->
+      <!-- <v-data-table
         :headers="headers"
         :items="desserts"
         :sort-by="['index']"
@@ -122,9 +226,6 @@
                     <v-col>
                       <v-file-input v-model="editedItem.fat" small-chips multiple label="图片"></v-file-input>
                     </v-col>
-                    <!-- <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                    </v-col> -->
                   </v-container>
                 </v-card-text>
   
@@ -158,17 +259,8 @@
         <template v-slot:expanded-item="{ headers, item }">
           <td :colspan="headers.length">More info about {{ item.level }}</td>
         </template>
-      </v-data-table>
-  
-      <!-- <v-btn
-        :disabled="!valid"
-        color="success"
-        class="mr-4"
-        @click="validate"
-      >
-        Validate
-      </v-btn> -->
-  
+      </v-data-table> -->
+
       <v-btn
         color="error"
         class="mr-4"
@@ -179,7 +271,7 @@
   
       <v-btn
         color="warning"
-        @click="resetValidation"
+        @click="addActivity"
       >
         确 定
       </v-btn>
@@ -188,6 +280,9 @@
 </template>
 
 <script>
+  import {
+    postActivity, // 创建活动
+  } from '../../../api/module/backend'
   export default {
     name: 'AddActivity',
 
@@ -198,16 +293,7 @@
       // 获取本地数据
       userMsg: {},
       valid: true,
-      name: '',
-      nameRules: [
-        // v => !!v || 'Name is required',
-        // v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-      ],
       email: '',
-      emailRules: [
-        // v => !!v || 'E-mail is required',
-        // v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ],
       select: null,
       items: [
         'Item 1',
@@ -218,6 +304,17 @@
       checkbox: false,
 
 
+      // 添加活动
+      name: '',
+      lotteryDisplay: 'Roulette',
+      availableChannels: [],
+      activityType: 'Lottery',
+      timeType: 'st',
+
+      startTime: new Date().toISOString().substr(0, 10),
+      menu: false,
+      endTime: null,
+      menu2: false,
 
       // tabledata
       dialog: false,
@@ -254,7 +351,6 @@
       },
       expanded: [],
       singleExpand: true,
-      lotteryDisplay: 1,
       channelCode: 0
     }),
 
@@ -275,6 +371,28 @@
     },
 
     methods: {
+      // 创建活动
+      addActivity() {
+        if (this.activityType !== 'Lottery') {
+          this.lotteryDisplay = 'None'
+        }
+        let data = {
+          name: this.name,
+          // limit: 0,
+          // dailyLimit: 0,
+          availableChannels: this.availableChannels,
+          lotteryDisplay: this.lotteryDisplay,
+          activityType: this.activityType,
+          startTime: this.startTime,
+          endTime: this.endTime
+        }
+        console.log(data)
+        postActivity(data).then(res => {
+          console.log(res)
+        })
+      },
+      
+      // 设置结束时间
       validate () {
         // this.$refs.form.validate()
       },

@@ -88,22 +88,22 @@
 
 <script>
   import {
-    getActivityAvailable, // 创建活动
-    getActivity,
-    deleteActivity, // 删除活动
+    getPrizeItemByName,
+    getPrizeItemById,
+    getPrizeItemList
   } from '../../../api/module/backend'
 export default {
-  name: 'ManageActivity',
+  name: 'ManageProd',
   data: () => ({
     search: '',
     headers: [
       {
-        text: '活动名称',
+        text: '商品名称',
         align: 'start',
         sortable: false,
         value: 'name',
       },
-      { text: '活动类型', value: 'activityType' },
+      { text: '商品', value: 'activityType' },
       { text: '活动渠道', value: 'availableChannels' },
       { text: 'Carbs (g)', value: 'carbs' },
       { text: 'Protein (g)', value: 'protein' },
@@ -129,8 +129,7 @@ export default {
     },
   }),
   created () {
-    this.getActivityAva()
-    // this.getAct()
+    this.getProd()
   },
   computed: {
     formTitle () {
@@ -174,43 +173,29 @@ export default {
 
 
 
-
-
     // 获取活动列表
-    getActivityAva() {
-      let data = {
-        StartTime: '1970-01-01',
-        AvailableChannels: 'ngs,ngsplaza,alldays'
+    getProd() {
+      let data2 = {
+        Name: '积分'
       }
-      data = JSON.stringify(data)
-      data = JSON.parse(data)
-      getActivityAvailable(data).then(res => {
-        console.log(res)
-        this.desserts = res.data.data
-      })
-    },
-    // 获取单个活动
-    getAct() {
-      let data = {
-        id: ''
+      let data3 = {
+        Id : "08d97402-e17b-4a3c-8865-421be6e667d8"
       }
-      getActivity(data).then(res => {
-        console.log(res)
-      })
-    },
-
-    // 删除活动
-    delAct(val) {
-      console.log(val)
-      let deldata = {
-        id: val.id
-      }
-      console.log(deldata)
-      deleteActivity(deldata).then(res2 => {
+      getPrizeItemByName(data2).then(res2 => {
         console.log(res2)
-        this.getActivityAva()
+      })
+      getPrizeItemById(data3).then(res3 => {
+        console.log(res3)
+      })
+      let data4 = {
+        Page: 1,
+        Num: 50
+      }
+      getPrizeItemList(data4).then(res4 => {
+        console.log(res4)
       })
     },
+    
   }
 }
 </script>

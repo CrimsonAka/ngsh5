@@ -24,7 +24,6 @@
         <v-card
           :color="item.color"
           dark
-          @click="activityBtn(item)"
         >
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
@@ -35,14 +34,17 @@
 
               <v-card-subtitle style="font-size:14px;">次数：{{item.cishu}}</v-card-subtitle>
               <v-card-actions>
-                <v-btn :elevation="4" text>兑换</v-btn>
+                <v-btn :elevation="4" text @click="patchBtn">兑换</v-btn>
+                <v-btn :elevation="4" text @click="postBtn">抽奖</v-btn>
               </v-card-actions>
+              
             </div>
 
             <v-avatar
               class="ma-3"
               size="125"
               tile
+              @click="activityBtn(item)"
             >
               <v-img :src="item.src"></v-img>
             </v-avatar>
@@ -52,7 +54,6 @@
     </v-row>
     <v-btn @click="getUserinfo">获取用户信息</v-btn>
     <v-btn @click="deleteUserBtn">删除用户信息</v-btn>
-    <v-btn @click="getToken">获取token</v-btn>
 
     <!-- <router-link to="/">返回</router-link>
 
@@ -134,7 +135,10 @@ import {
   getuserid, // 获取用户id
   getActivityAvailable, // 获取活动列表  GetActivityAvailable
   getUser, // 获取用户信息
-  deleteUser
+  deleteUser, // 删除用户信息
+  postActivityUserBindAvailable, // 为用户绑定所有可参与活动
+  // patchActivityUser, // 用户兑换抽奖次数
+  // postLottery, // 抽奖
 } from '../../api/module/backend'
 import dayjs from 'dayjs'
 export default {
@@ -184,7 +188,7 @@ export default {
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
     this.fetchData()
-    this.getLS()
+    // this.getLS()
     this.getActAvailable()
     // this.getAdward()
   },
@@ -193,10 +197,48 @@ export default {
     '$route': 'fetchData'
   },
   methods: {
-    // 删除用户
-    deleteUserBtn() {
+    // 获取localstorage信息
+    getLocalStorageUser() {
       let user = localStorage.getItem('user')
       user = JSON.parse(user)
+      return user
+    },
+    // 抽奖按钮
+    postBtn() {
+      console.log('抽奖')
+      let user = this.getLocalStorageUser()
+      console.log(user)
+      let data = {
+        channelCode: '', // 渠道
+        lotteryDisplay: '', // 抽奖类型
+        userId: user.userId, // 用户id
+        activityId: '', // 活动id
+        count: 1 // 抽奖次数
+      }
+      console.log(data)
+      // postLottery(data).then(res => {
+      //   console.log(res)
+      // })
+    },
+    // 兑换次数
+    patchBtn() {
+      console.log('兑换抽奖次数')
+      let user = this.getLocalStorageUser()
+      let data = {
+        activityId: '',
+        userId: user.userId,
+        count: 0,
+        unitPrice: 0,
+        reason: "string"
+      }
+      console.log(data)
+      // patchActivityUser(data).then(res => {
+      //   console.log(res)
+      // })
+    },
+    // 删除用户
+    deleteUserBtn() {
+      let user = this.getLocalStorageUser()
       let userId = {
         id: user.userId
       }
@@ -241,19 +283,21 @@ export default {
     getLS() {
       getuserid().then(res => {
         if (res) {
+          console.log("userid:")
           console.log(res)
           let info = {
             userId: res.data.sub
           }
           info = JSON.stringify(info)
           localStorage.setItem('user', info)
+          // 后续获取到用户id之后自动获取用户数据信息并保存到localstorage中
         } else {
           console.log('刷新')
         }
       })
     },
 
-    // 获取活动列表
+    // 获取活动列表 并绑定所有活动
     getActAvailable() {
       let dj = dayjs().format('YYYY-MM-DD')
       let data = {
@@ -262,21 +306,32 @@ export default {
       }
       data = JSON.stringify(data)
       data = JSON.parse(data)
+      console.log("获取活动列表api请求数据：")
       console.log(data)
       getActivityAvailable(data).then(res => {
+        console.log('获取到的可以玩耍的活动：')
+        console.log(res)
+      })
+      let user = this.getLocalStorageUser()
+      let binddata = {
+        userId: user.userId,
+        availableChannel: 'Ngs'
+      }
+      console.log(binddata)
+      postActivityUserBindAvailable(binddata).then(res => {
         console.log(res)
       })
     },
 
     // 获取用户信息
     getUserinfo() {
-      let user = localStorage.getItem('user')
-      user = JSON.parse(user)
+      let user = this.getLocalStorageUser()
       let userId = {
         id: user.userId
       }
       console.log(userId)
       getUser(userId).then(res => {
+        console.log('获取到的用户数据')
         console.log(res)
       })
     },

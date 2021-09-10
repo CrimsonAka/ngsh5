@@ -9,16 +9,11 @@
         v-for="item in items2"
         :key="item.title"
       >
-        <v-list-item-avatar>
-          <v-icon
-            :class="[item.iconClass]"
-            v-text="item.icon"
-          ></v-icon>
-        </v-list-item-avatar>
 
         <v-list-item-content @click="getAddressInfo(item)">
-          <v-list-item-title v-text="item.title"></v-list-item-title>
-          <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
+          <v-list-item-title>{{item.recipient}} {{item.recipientPhoneNumber}}</v-list-item-title>
+          <v-list-item-subtitle>{{item.province}} {{item.city}} {{item.region}}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{item.detailedAddress}}</v-list-item-subtitle>
         </v-list-item-content>
 
         <!-- <v-list-item-action>
@@ -30,22 +25,22 @@
 
       <v-divider inset></v-divider>
 
-      <v-subheader inset>其他地址</v-subheader>
+      <v-subheader inset>所有地址</v-subheader>
 
       <v-list-item
         v-for="item in items"
         :key="item.title"
       >
-        <v-list-item-avatar>
+        <!-- <v-list-item-avatar>
           <v-icon
             :class="[item.iconClass]"
             v-text="item.icon"
           ></v-icon>
-        </v-list-item-avatar>
+        </v-list-item-avatar> -->
 
         <v-list-item-content @click="getAddressInfo(item)">
-          <v-list-item-title v-text="item.title"></v-list-item-title>
-          <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
+          <v-list-item-title>{{item.recipient}} {{item.recipientPhoneNumber}}</v-list-item-title>
+          <v-list-item-subtitle>{{item.province}} {{item.city}} {{item.region}}</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-content></v-list-item-content>
@@ -55,7 +50,7 @@
             <v-icon color="grey lighten-1" @click="delAddBtn(item)">mdi-trash-can</v-icon>
           </v-btn>
           <v-btn icon>
-            <v-icon color="grey lighten-1">mdi-arrow-up</v-icon>
+            <v-icon color="grey lighten-1" @click="updateAddBtn(item)">mdi-arrow-up</v-icon>
           </v-btn>
         </v-list-item-action>
       </v-list-item>
@@ -69,7 +64,8 @@
 <script>
 import {
   getAddressUser, // 获取用户所有地址信息
-  // deleteAddress // 删除地址信息
+  deleteAddress, // 删除地址信息
+  updateAddress // 更换默认地址
 } from '../../../api/module/backend'
 export default {
   name: 'Address',
@@ -77,12 +73,8 @@ export default {
   data: () => ({
     // 测试数据
     items: [
-      { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '地址1', subtitle: '' },
-      { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '地址2', subtitle: '' },
-      { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '地址3', subtitle: '' },
     ],
     items2: [
-      { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '默认地址', subtitle: '' },
     ],
     // 
     person: '个人信息',
@@ -100,14 +92,23 @@ export default {
   methods: {
     // 获取用户所有地址信息
     getAddUser() {
+      this.items = []
+      this.items2 = []
       let user = localStorage.getItem('user')
       user = JSON.parse(user)
       let userId = {
-        id: user.userId
+        UserId: user.userId
       }
       console.log(userId)
       getAddressUser(userId).then(res => {
-        console.log(res)
+        console.log(res.data)
+        this.items = res.data.data
+        for(let i of res.data.data) {
+          // console.log(i)
+          if (i.isDefault === true) {
+            this.items2.push(i)
+          }
+        }
       })
     },
 
@@ -120,9 +121,26 @@ export default {
     delAddBtn(data) {
       console.log('删除')
       console.log(data)
-      // deleteAddress().then(res => {
-      //   console.log(res)
-      // })
+      let deldata = {
+        id: data.id
+      }
+      console.log(deldata)
+      deleteAddress(deldata).then(res => {
+        console.log(res)
+        this.getAddUser()
+      })
+    },
+
+    // 更换默认地址
+    updateAddBtn(val) {
+      // console.log(val)
+      let data = val
+      data.isDefault = true
+      console.log(data)
+      updateAddress(data).then(res => {
+        console.log(res)
+        this.getAddUser()
+      })
     },
 
     // 

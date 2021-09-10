@@ -2,18 +2,18 @@
   <div>
     <div>{{ person }}</div>
     <v-list two-line subheader>
-      <v-subheader inset>中奖历史记录</v-subheader>
+      <v-subheader inset>历史中奖记录</v-subheader>
 
       <v-list-item
         v-for="item in items"
         :key="item.title"
       >
-        <v-list-item-avatar>
+        <!-- <v-list-item-avatar>
           <v-icon
             :class="[item.iconClass]"
             v-text="item.icon"
           ></v-icon>
-        </v-list-item-avatar>
+        </v-list-item-avatar> -->
 
         <v-list-item-content>
           <v-list-item-title v-text="item.title"></v-list-item-title>
@@ -32,6 +32,9 @@
 </template>
 
 <script>
+import {
+  getLotteryWinRecords, // 获取用户获奖记录
+} from '../../../api/module/backend'
   export default {
     name: 'Adward',
 
@@ -49,11 +52,22 @@
     }),
 
     created() {
-      // this.ifLogin()
+      this.getLotteryWinningRecords()
     },
 
     methods: {
-
+      // 获取用户历史中奖记录
+      getLotteryWinningRecords() {
+        let user = localStorage.getItem('user')
+        user = JSON.parse(user)
+        let userId = {
+          UserId: user.userId
+        }
+        console.log(userId)
+        getLotteryWinRecords(userId).then(res => {
+          console.log(res)
+        })
+      },
     }
 
   }

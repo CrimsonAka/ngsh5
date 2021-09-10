@@ -1,13 +1,12 @@
 <template>
   <v-app>
     <!-- 导航栏 -->
-    <v-navigation-drawer fixed width="225px">
+    <v-navigation-drawer absolute width="225px">
       <v-row class="fill-height" no-gutters>
         <!-- 左导航栏 -->
         <v-navigation-drawer
           v-model="drawer"
-          :color="color"
-          :mini-variant="miniVariant"
+          mini-variant
           permanent
           :src="bg"
           dark
@@ -16,7 +15,7 @@
             dense
             class="py-0"
           >
-            <v-list-item two-line :class="miniVariant && 'px-0'">
+            <v-list-item :class="'px-0'">
               <v-menu
                 v-model="menu"
                 :close-on-content-click="false"
@@ -25,10 +24,10 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-list-item-avatar
-                    color="indigo"
                     dark
                     v-bind="attrs"
                     v-on="on"
+                    style="margin:10px auto;"
                   >
                     <img alt="wutu" src="https://randomuser.me/api/portraits/men/81.jpg">
                   </v-list-item-avatar>
@@ -121,49 +120,49 @@
         </v-navigation-drawer>
 
         <!-- 选项一 -->
-        <v-list nav class="grow" v-if="this.submenu === '个人信息'">
+        <v-list dense nav v-if="this.submenu === '用户管理'">
 
-          <v-subheader>{{ this.submenu }}</v-subheader>
-          <v-list-item-group v-model="item" color="primary">
+          <v-subheader style="font-size:17px; font-weight:700;">{{ this.submenu }}</v-subheader>
+          <v-list-item-group v-model="item" color="blue">
             <v-list-item
               v-for="item in dashboardmenu"
               :key="item.subtitle"
             >
               <v-list-item-icon @click="routerClick(item)">
-                <v-icon>mdi-chevron-right</v-icon>
-                <span>{{item.subtitle}}</span>
+                <v-icon medium>mdi-chevron-right</v-icon>
+                <span style="font-size: 14px;line-height:180%">{{item.subtitle}}</span>
               </v-list-item-icon>
             </v-list-item>
           </v-list-item-group>
         </v-list>
 
         <!-- 选项二 -->
-        <v-list class="grow" v-if="this.submenu === '抽奖管理'">
-          <v-subheader>{{ this.submenu }}</v-subheader>
-          <v-list-item-group v-model="item" color="primary">
+        <v-list dense nav  v-if="this.submenu === '抽奖管理'">
+          <v-subheader style="font-size:17px; font-weight:700;">{{ this.submenu }}</v-subheader>
+          <v-list-item-group v-model="item" color="blue">
             <v-list-item
               v-for="item in photosmenu"
               :key="item.subtitle"
             >
               <v-list-item-icon @click="routerClick(item)">
-                <v-icon>mdi-chevron-right</v-icon>
-                <span>{{item.subtitle}}</span>
+                <v-icon medium>mdi-chevron-right</v-icon>
+                <span style="font-size: 14px;line-height:180%">{{item.subtitle}}</span>
               </v-list-item-icon>
             </v-list-item>
           </v-list-item-group>
         </v-list>
 
         <!-- 选项三 -->
-        <v-list class="grow" v-if="this.submenu === '奖品管理'">
-          <v-subheader>{{ this.submenu }}</v-subheader>
-          <v-list-item-group v-model="item" color="primary">
+        <v-list dense nav  v-if="this.submenu === '奖品管理'">
+          <v-subheader style="font-size:17px; font-weight:700;">{{ this.submenu }}</v-subheader>
+          <v-list-item-group v-model="item" color="blue">
             <v-list-item
               v-for="item in aboutmenu"
               :key="item.subtitle"
             >
               <v-list-item-icon @click="routerClick(item)">
-                <v-icon>mdi-chevron-right</v-icon>
-                <span>{{item.subtitle}}</span>
+                <v-icon medium>mdi-chevron-right</v-icon>
+                <span style="font-size: 14px;line-height:180%">{{item.subtitle}}</span>
               </v-list-item-icon>
             </v-list-item>
           </v-list-item-group>
@@ -191,14 +190,14 @@
       // 导航栏
       drawer: true,
       items: [
-        { title: '个人信息', icon: 'mdi-view-dashboard' },
+        { title: '用户管理', icon: 'mdi-view-dashboard' },
         { title: '抽奖管理', icon: 'mdi-image' },
         { title: '奖品管理', icon: 'mdi-help-box' },
       ],
-      submenu: '个人信息',
+      submenu: '用户管理',
       dashboardmenu: [
         { subtitle: 'Home1', id: 'person' },
-        { subtitle: '个人信息' },
+        { subtitle: '用户管理' },
         { subtitle: 'Settings' }
       ],
       photosmenu: [
@@ -207,23 +206,15 @@
         { subtitle: '奖品管理' }
       ],
       aboutmenu: [
-        { subtitle: '会员信息' },
-        { subtitle: '奖品' },
+        { subtitle: '添加商品', id: 'addProd' },
+        { subtitle: '奖品管理', id: 'manageProd' },
         { subtitle: 'Set' }
-      ],
-      color: 'primary',
-      colors: [
-        'primary',
-        'blue',
-        'success',
-        'red',
-        'teal',
       ],
       miniVariant: true,
       background: true,
       item: [
         {
-          text: '个人信息',
+          text: '用户管理',
           disabled: false,
           href: 'breadcrumbs_dashboard',
         },

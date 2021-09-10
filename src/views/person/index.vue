@@ -14,12 +14,12 @@
         v-for="item in items"
         :key="item.title"
       >
-        <v-list-item-avatar>
+        <!-- <v-list-item-avatar>
           <v-icon
             :class="[item.iconClass]"
             v-text="item.icon"
           ></v-icon>
-        </v-list-item-avatar>
+        </v-list-item-avatar> -->
 
         <v-list-item-content @click="itemBtn(item)">
           <v-list-item-title v-text="item.title"></v-list-item-title>
@@ -27,7 +27,7 @@
         </v-list-item-content>
 
         <v-list-item-action>
-          <v-btn v-if="item.val === 0" icon @click="itemBtn(item)">
+          <v-btn v-if="item.val === 0" icon @click="attendance(item)">
             签到
           </v-btn>
           <v-btn v-if="item.val !== 0" icon @click="itemBtn(item)">
@@ -41,6 +41,10 @@
 </template>
 
 <script>
+import {
+  getUser, // 获取用户信息
+  postAttendance, // 签到
+} from '../../api/module/backend'
   export default {
     name: 'Person',
 
@@ -60,9 +64,42 @@
 
     created() {
       this.ifLogin()
+      this.getUserinfo()
     },
 
     methods: {
+      // 签到
+      attendance(data) {
+        console.log('签到：')
+        console.log(data)
+        let user = this.getLocalStorageUser()
+        let postdata = {
+          channelCode: "ngs",
+          earnedCredits: 0,
+          reason: "签到",
+          userId: user.userId,
+          activityId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        }
+        console.log(postdata)
+        postAttendance(postdata).then(res => {
+          console.log(res)
+        })
+      }, 
+      
+      // 获取用户信息
+      getUserinfo() {
+        let user = this.getLocalStorageUser()
+        let userId = {
+          id: user.userId
+        }
+        console.log(userId)
+        getUser(userId).then(res => {
+          console.log('获取到的用户数据')
+          console.log(res)
+        })
+      },
+
+
       // 判断是否登录
       ifLogin() {
         this.userMsg = JSON.parse(localStorage.getItem('token'))
@@ -87,7 +124,13 @@
             path: '/home/adward'
           })
         }
-      }
+      },
+      // 获取localstorage信息
+      getLocalStorageUser() {
+        let user = localStorage.getItem('user')
+        user = JSON.parse(user)
+        return user
+      },
 
     }
 

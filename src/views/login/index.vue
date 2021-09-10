@@ -53,6 +53,7 @@
               </v-slide-x-reverse-transition>
               <v-btn color="primary" text @click="submit">登录/注册</v-btn>
             </v-card-actions>
+            <div>{{ login_channel }}</div>
           </v-card>
         </v-col>
       </v-row>
@@ -84,7 +85,8 @@
 <script>
   import { 
     getphone,
-    gettoken 
+    gettoken,
+    getuserid
   } from '../../api/module/backend'
   export default {
     name: 'Login',
@@ -109,6 +111,8 @@
       timeBtn: false,
       time: 60,
 
+      login_channel: '',
+
       // 路由监听
       loading: false,
       post: null,
@@ -127,6 +131,7 @@
 
     created() {
       this.fetchData()
+      this.getLoginChannel()
     },
 
     watch: {
@@ -134,6 +139,11 @@
     },
 
     methods: {
+      // 获取login_channel
+      getLoginChannel() {
+        this.login_channel = this.$route.query.login_channel
+        localStorage.setItem('channelCode', this.login_channel)
+      },
       // 返回主页面
       backBtn() {
         this.$router.push({ path: '/'})
@@ -210,9 +220,24 @@
             }
             info = JSON.stringify(info)
             localStorage.setItem('token', info)
-            this.$router.push({
-              path: '/home/ngs'
+            getuserid().then(res2 => {
+              if (res2) {
+                console.log("userid:")
+                console.log(res2)
+                let info2 = {
+                  userId: res2.data.sub
+                }
+                info2 = JSON.stringify(info2)
+                localStorage.setItem('user', info2)
+                // 后续获取到用户id之后自动获取用户数据信息并保存到localstorage中
+                this.$router.push({
+                  path: '/home/ngs'
+                })
+              }
             })
+            // this.$router.push({
+            //   path: '/home/ngs'
+            // })
           })
         } else {
           console.log('失败')
@@ -221,8 +246,8 @@
 
       // 路由监听
       fetchData () {
-      this.error = this.post = null
-      this.loading = true
+        this.error = this.post = null
+        this.loading = true
       // replace getPost with your data fetching util / API wrapper
       // getPost(this.$route.params.id, (err, post) => {
       //   this.loading = false
@@ -232,12 +257,10 @@
       //     this.post = post
       //   }
       // })
-      if (this.$route) {
-        console.log(this.$route)
-        this.msg_i = JSON.stringify(this.$route.matched)
-        console.log(this.msg_i)
+        if (this.$route) {
+          console.log(this.$route)
+        }
       }
-    }
     }
   }
 </script>

@@ -1,0 +1,52 @@
+// 获取所有用户列表
+{
+  page: 1, // 第一页
+  num: 50, // 每页50个
+  role: '',
+}
+
+
+userId: "08d97337-03c6-496a-89fe-0ad68f7692be"
+
+access_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6IjAzRDI5RkJEMkNGMzczNDYxMENBNjI4NUE1QzQzQUFGIiwidHlwIjoiYXQrand0In0.eyJuYmYiOjE2MzExNTM0MzcsImV4cCI6MTYzMTIzOTgzNywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MjUzNyIsImF1ZCI6WyJlcGx1cy5hcGkiLCJodHRwOi8vbG9jYWxob3N0OjUyNTM3L3Jlc291cmNlcyJdLCJjbGllbnRfaWQiOiJzbXMuY2xpZW50Iiwic3ViIjoiMDhkOTczMzctMDNjNi00OTZhLTg5ZmUtMGFkNjhmNzY5MmJlIiwiYXV0aF90aW1lIjoxNjMxMTUzNDM3LCJpZHAiOiJsb2NhbCIsInJvbGUiOiJjdXN0b21lciIsImp0aSI6IkFFRTAzNjNGQkM2REMwMDE3NEQyQjc2NENGMjQyMTM0IiwiaWF0IjoxNjMxMTUzNDM3LCJzY29wZSI6WyJlcGx1cy50ZXN0LnNjb3BlIiwib3BlbmlkIl0sImFtciI6WyJzbXMiXX0.As0YeWwaerN5TFU9dw-JW75BFtumqg4cM_xINDGZ_MyncvMEBtNQbEJOugOUT90JDCX8iYzhGF9e42b8Q3AAMEqSFNMQiZOwVAGiWryEjQ8aKInMY6cH0-8KOmCd0enhSKNudcEnnVuhribZeLau3xMqgXR_aL3a9xSUFTN57YYMtY1o779GS0dhGK0NNMxJc7F5je68atEvl6G2tJCND76jRfg054vLovVdJW8ZS8gXsAk6sqyg1JHOy7ph6KcJmnrIHZbub8Oh9OZJ5fdGKCHJcou5w5xgG9r7kZq6ZJAoV1Y8vrLB5U85_uQMCfTJNJcPn_wVgwG_tSIJxtZd4A"
+
+
+
+city: "嘉定区"
+country: "上海市"
+detailedAddress: "梅川路"
+id: "08d9733b-a817-447d-89ad-f3a332b47ad5"
+isDefault: false
+postcode: "201824"
+province: "市辖区"
+recipient: "陈鸿炜"
+recipientPhoneNumber: "18121027189"
+userId: "08d97337-03c6-496a-89fe-0ad68f7692be"
+
+
+{
+  "name": "string",
+  "quantity": 0,
+  "prizeType": "string",
+  "couponActiveCode": "string",
+  "credit": 0,
+  "categoryName": "string",
+  "brandName": "string",
+  "unitPrice": 0,
+  "requiredCredit": 0,
+  "stock": 0
+}
+
+
+activityCode: "h85434184589"
+activityType: "Lottery"
+availableChannels: Array(1)
+0: "Ngs"
+length: 1
+[[Prototype]]: Array(0)
+dailyLimit: null
+endTime: null
+id: "08d97423-1b9d-4fa7-841e-901ba7b633e0"
+limit: null
+lotteryDisplay: "Roulette"
+name: "测试活动1"

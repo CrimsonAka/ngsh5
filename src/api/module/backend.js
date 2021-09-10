@@ -68,19 +68,18 @@ export function getuserid(data) {
 // 没有参数
 
 // 获取用户信息
-export function getuserinfo(data) {
-  return http({
-    url: '/api/user',
-    method: 'get',
-    // headers: { 'content-type': '' },
-    params: data
-  })
-}
-// {
-//   id: '', // 用户id
-//   LoginChannel: '' // 登录渠道
+// export function getuserinfo(data) {
+//   return http({
+//     url: '/api/user',
+//     method: 'get',
+//     // headers: { 'content-type': '' },
+//     params: data
+//   })
 // }
-
+// // {
+// //   id: '', // 用户id
+// //   LoginChannel: '' // 登录渠道
+// // }
 // 获取用户信息 GetUser
 export function getUser(data) {
   return http({
@@ -106,7 +105,7 @@ export function deleteUser(data) {
 // 获取用户所有地址信息 get AddressUser
 export function getAddressUser(data) {
   return http({
-    url: '/api/Address/user',
+    url: '/api/Address/list',
     method: 'get',
     params: data
   })
@@ -183,7 +182,7 @@ export function deleteAddress(data) {
 // }
 
 // ==========  lottery / 抽奖 ==========
-// 获取用户再指定活动中抽奖情况 get lottery records
+// 获取用户再指定活动抽奖情况 get lottery records
 export function getLotteryRecords(data) {
   return http({
     url: '/api/Lottery/lottery-records',
@@ -210,7 +209,7 @@ export function getLotteryWinRecords(data) {
 
 
 // 抽奖 post Lottery
-export function addLottery(data) {
+export function postLottery(data) {
   return http({
     url: '/api/Lottery',
     method: 'post',
@@ -221,7 +220,7 @@ export function addLottery(data) {
 //   channelCode: '', // 渠道
 //   lotteryDisplay: '', // 抽奖类型
 //   userId: '', // 用户id
-//   activity: '', // 活动id
+//   activityId: '', // 活动id
 //   count: 1 // 抽奖次数
 // }
 
@@ -270,8 +269,9 @@ export function getActivity(data) {
 // 获取活动列表  get Activity/Available
 export function getActivityAvailable(data) {
   return http({
-    url: '/api/Activity/available',
+    url: '/api/Activity/list',
     method: 'get',
+    // headers: { 'content-type': 'x-www-form-urlencoded' },
     // params: { 'startTime': data }
     params: data
   })
@@ -283,7 +283,7 @@ export function getActivityAvailable(data) {
 // }
 
 // 创建活动 post Activity
-export function addActivity(data) {
+export function postActivity(data) {
   return http({
     url: '/api/Activity',
     method: 'post',
@@ -302,7 +302,7 @@ export function addActivity(data) {
 // }
 
 // 修改活动信息 put Activity
-export function updateActivit(data) {
+export function updateActivity(data) {
   return http({
     url: '/api/Activity',
     method: 'put',
@@ -399,3 +399,50 @@ export function postAttendance(data) {
   })
 }
 
+// ========== 注册管理员账号 ==========
+// 注册管理员账号
+export function postUser(data) {
+  return http({
+    url: '/api/User',
+    method: 'post',
+    data
+  })
+}
+
+
+// ========== 奖品 / PrizeItem ==========
+// 添加商品
+export function postPrizeItem(data) {
+  return http({
+    url: '/api/PrizeItem',
+    method: 'post',
+    data
+  })
+}
+
+// 通过商品名 == 获取商品商品
+export function getPrizeItemByName(data) {
+  return http({
+    url: '/api/PrizeItem/name',
+    method: 'get',
+    params: data
+  })
+}
+
+// 通过id == 获取商品商品
+export function getPrizeItemById(data) {
+  return http({
+    url: '/api/PrizeItem',
+    method: 'get',
+    params: data
+  })
+}
+
+// 获取商品列表
+export function getPrizeItemList(data) {
+  return http({
+    url: '/api/PrizeItem/list',
+    method: 'get',
+    params: data
+  })
+}

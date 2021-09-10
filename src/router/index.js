@@ -22,7 +22,9 @@ import gua from '../views/ngs/choujiang/gua.vue'
 // 管理页面
 import maLayout from '../views/management/maLayout.vue'
 import addActivity from '../views/management/pro/addActivity.vue'
+import addProd from '../views/management/pro/addProd.vue'
 import manageActivity from '../views/management/pro/manageActivity.vue'
+import manageProd from '../views/management/pro/manageProd.vue'
 import maLogin from '../views/management/login/maLogin.vue'
 
 Vue.use(VueRouter)
@@ -112,14 +114,24 @@ const routes = [
         component: person
       },
       {
-        path: '/management/addactivity',
+        path: '/management/addActivity',
         name: 'AddActivity',
         component: addActivity
       },
       {
-        path: '/management/ManageActivity',
+        path: '/management/addprod',
+        name: 'AddProd',
+        component: addProd
+      },
+      {
+        path: '/management/manageActivity',
         name: 'ManageActivity',
         component: manageActivity
+      },
+      {
+        path: '/management/manageProd',
+        name: 'ManageProd',
+        component: manageProd
       }
     ]
   },

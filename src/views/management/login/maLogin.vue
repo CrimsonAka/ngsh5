@@ -87,6 +87,8 @@
                   ref="yan"
                   label="密码"
                   v-model="zc_pwd"
+                  :rules="pwdRule"
+                  required
                   />
                 </div>
                 <div class="flex-dir-row">
@@ -94,14 +96,16 @@
                   ref="yan"
                   label="确认密码"
                   v-model="zc_sure_pwd"
+                  required
                   />
                 </div>
+                <div>密码需包含大小写、数字和符号</div>
             </v-card-text>
             <v-divider class="mt-12"></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="primary" text @click="backBtn">返 回</v-btn>
-              <v-btn color="primary" text @click="submit">注册并登录</v-btn>
+              <v-btn color="primary" text @click="zcBtn">注册并登录</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -114,6 +118,8 @@
 <script>
   import {
     gettoken, // 获取token
+    postUser, // 注册管理员账号
+    getuserid // 获取用户id
   } from '../../../api/module/backend'
   export default {
     name: 'MaLogin',
@@ -141,7 +147,10 @@
       // 注册框
       zc_username: '',
       zc_pwd: '',
-      zc_sure_pwd: ''
+      zc_sure_pwd: '',
+      pwdRule: [
+        v => (v && v.length >= 6) || '密码长度 > 6',
+      ],
     }),
 
     computed: {
@@ -203,9 +212,24 @@
             }
             info = JSON.stringify(info)
             localStorage.setItem('token', info)
-            this.$router.push({
-              path: '/management/person'
+            getuserid().then(res2 => {
+              if (res2) {
+                console.log("userid:")
+                console.log(res2)
+                let info2 = {
+                  userId: res2.data.sub
+                }
+                info2 = JSON.stringify(info2)
+                localStorage.setItem('user', info2)
+                // 后续获取到用户id之后自动获取用户数据信息并保存到localstorage中
+                this.$router.push({
+                  path: '/management/addactivity'
+                })
+              }
             })
+            // this.$router.push({
+            //   path: '/management/person'
+            // })
           })
         } else {
           console.log('验证失败')
@@ -216,6 +240,59 @@
       zhuceBtn() {
         this.login = false
         this.zhuce = true
+      },
+
+      // 注册
+      zcBtn() {
+        let logindata = {
+          client_id: 'password',
+          grant_type: 'password',
+          scope: 'eplus.test.scope openid',
+          username: 'admin',
+          password: 'Pa$$w0rd'
+        }
+        console.log(logindata)
+        gettoken(logindata).then(res => {
+          let info = {
+            access_token: res.data.access_token
+          }
+          info = JSON.stringify(info)
+          localStorage.setItem('token', info)
+          if (this.zc_pwd === this.zc_sure_pwd) {
+          let data = {
+            userName: this.zc_username,
+            password: this.zc_pwd,
+            role: 'manager'
+          }
+          postUser(data).then(res2 => {
+            console.log(res2)
+            this.username = this.zc_username
+            this.pwd = this.zc_pwd
+            this.submit()
+          })
+        } else {
+          this.snackbar = true
+          this.text = "密码不一致！"
+        }
+        })
+        
+        // if (this.zc_pwd === this.zc_sure_pwd) {
+        //   let data = {
+        //     userName: this.zc_username,
+        //     password: this.zc_pwd,
+        //     role: 'manager'
+        //   }
+        //   postUser(data).then(res => {
+        //     console.log(res)
+        //     this.username = this.zc_username
+        //     this.pwd = this.zc_pwd
+        //     this.submit()
+        //   })
+        // } else {
+        //   this.snackbar = true
+        //   this.text = "密码不一致！"
+        // }
+        
       },
     }
   }
