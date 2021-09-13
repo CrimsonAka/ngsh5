@@ -50,3 +50,50 @@ id: "08d97423-1b9d-4fa7-841e-901ba7b633e0"
 limit: null
 lotteryDisplay: "Roulette"
 name: "测试活动1"
+
+
+
+"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+"name": "string",
+"prizeType": "string",
+"couponActiveCode": "string",
+"credit": 0,
+"categoryName": "string",
+"brandName": "string",
+"unitPrice": 0,
+"quantity": 0,
+"stock": 0
+
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "string",
+  "limit": 0,
+  "dailyLimit": 0,
+  "availableChannels": [
+    "string"
+  ],
+  "lotteryDisplay": "string",
+  "startTime": "2021-09-12T19:12:50.727Z",
+  "endTime": "2021-09-12T19:12:50.727Z"
+}
+
+  "name": "string",
+  "percentage": 0,
+  "activityId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "prizeItemIds": [
+    "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  ]
+
+  {
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "string",
+  "limit": 0,
+  "dailyLimit": 0,
+  "availableChannels": [
+    "string"
+  ],
+  "lotteryDisplay": "string",
+  "startTime": "2021-09-12T21:11:04.578Z",
+  "endTime": "2021-09-12T21:11:04.578Z"
+}
+

@@ -438,11 +438,89 @@ export function getPrizeItemById(data) {
   })
 }
 
-// 获取商品列表
-export function getPrizeItemList(data) {
+// 通过ids == 获取商品商品
+export function getPrizeItemByIds(data) {
   return http({
     url: '/api/PrizeItem/list',
     method: 'get',
     params: data
+  })
+}
+
+// 获取商品列表
+export function getPrizeItemAll(data) {
+  return http({
+    url: '/api/PrizeItem/all',
+    method: 'get',
+    params: data
+  })
+}
+
+// 删除商品 deleteItem
+export function deletePrizeItem(data) {
+  return http({
+    url: '/api/PrizeItem',
+    method: 'delete',
+    // headers: { 'content-type': '' },
+    data
+  })
+}
+
+// 修改商品
+export function updatePrizeItem(data) {
+  return http({
+    url: '/api/PrizeItem',
+    method: 'put',
+    // headers: { 'content-type': '' },
+    data
+  })
+}
+
+
+// ========== 奖品档次 / PrizeTier ==========
+// 添加商品
+export function postPrizeTier(data) {
+  return http({
+    url: '/api/PrizeTier',
+    method: 'post',
+    data
+  })
+}
+
+// 通过商品名 == 获取商品商品
+export function getPrizeTier(data) {
+  return http({
+    url: '/api/PrizeTier',
+    method: 'get',
+    params: data
+  })
+}
+
+// 获取商品列表
+export function getPrizeTierActivity(data) {
+  return http({
+    url: '/api/PrizeTier/activity',
+    method: 'get',
+    params: data
+  })
+}
+
+// 删除商品 deleteItem
+export function deletePrizeTier(data) {
+  return http({
+    url: '/api/PrizeTier',
+    method: 'delete',
+    // headers: { 'content-type': '' },
+    data
+  })
+}
+
+// 修改商品
+export function updatePrizeTier(data) {
+  return http({
+    url: '/api/PrizeTier',
+    method: 'put',
+    // headers: { 'content-type': '' },
+    data
   })
 }

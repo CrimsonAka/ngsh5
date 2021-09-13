@@ -26,6 +26,8 @@ import addProd from '../views/management/pro/addProd.vue'
 import manageActivity from '../views/management/pro/manageActivity.vue'
 import manageProd from '../views/management/pro/manageProd.vue'
 import maLogin from '../views/management/login/maLogin.vue'
+import addPrizeTier from '../views/management/pro/addPrizeTier.vue'
+
 
 Vue.use(VueRouter)
 
@@ -122,6 +124,11 @@ const routes = [
         path: '/management/addprod',
         name: 'AddProd',
         component: addProd
+      },
+      {
+        path: '/management/addPrizeTier',
+        name: 'AddPrizeTier',
+        component: addPrizeTier
       },
       {
         path: '/management/manageActivity',

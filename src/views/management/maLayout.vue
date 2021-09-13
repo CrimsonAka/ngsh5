@@ -203,12 +203,10 @@
       photosmenu: [
         { subtitle: '添加活动', id: 'addActivity' },
         { subtitle: '活动管理', id: 'manageActivity' },
-        { subtitle: '奖品管理' }
       ],
       aboutmenu: [
         { subtitle: '添加商品', id: 'addProd' },
         { subtitle: '奖品管理', id: 'manageProd' },
-        { subtitle: 'Set' }
       ],
       miniVariant: true,
       background: true,

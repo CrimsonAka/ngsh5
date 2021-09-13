@@ -176,6 +176,9 @@
       addProd() {
         if (this.prizeType !== 'Credit') {
           this.credit = null
+        } 
+        if (this.prizeType !== 'Coupon') {
+          this.couponActiveCode = null
         }
         let data = {
           name: this.name,

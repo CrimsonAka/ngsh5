@@ -2,7 +2,7 @@
   <div id="app">
     <v-card>
       <v-card-title>
-        <v-toolbar-title>活动管理</v-toolbar-title>
+        <v-toolbar-title>奖品管理</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -33,28 +33,29 @@
           <v-dialog v-model="dialog" max-width="500px">
             <v-card>
               <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
+                <span class="headline">更新商品</span>
               </v-card-title>
 
               <v-card-text>
                 <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                  <v-col>
+                    <v-col cols="12" sm="6" md="8">
+                      <v-text-field v-model="editedItem.name" label="商品名称"></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                    <v-col cols="12" sm="6" md="8">
+                      <v-select
+                        v-model="editedItem.prizeType"
+                        :items="prizeTpyeItems"
+                        label="商品类型"
+                      ></v-select>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                    <v-col cols="12" sm="6" md="8" v-show="editedItem.prizeType === 'Coupon'">
+                      <v-text-field v-model="editedItem.couponActiveCode" label="优惠券兑换码"></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
+                    <v-col cols="12" sm="6" md="8" v-show="editedItem.prizeType === 'Credit'">
+                      <v-text-field v-model="editedItem.credit" label="积分"></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                    </v-col>
-                  </v-row>
+                  </v-col>
                 </v-container>
               </v-card-text>
 
@@ -68,14 +69,14 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon
-            small
             class="mr-2"
             @click="editItem(item)"
           >
             mdi-pencil
           </v-icon>
           <v-icon
-            small
+            color="red"
+            class="mr-2"
             @click="delAct(item)"
           >
             mdi-delete
@@ -89,8 +90,10 @@
 <script>
   import {
     getPrizeItemByName,
-    getPrizeItemById,
-    getPrizeItemList
+    // getPrizeItemById, 
+    getPrizeItemAll,
+    deletePrizeItem,
+    updatePrizeItem
   } from '../../../api/module/backend'
 export default {
   name: 'ManageProd',
@@ -103,10 +106,9 @@ export default {
         sortable: false,
         value: 'name',
       },
-      { text: '商品', value: 'activityType' },
-      { text: '活动渠道', value: 'availableChannels' },
-      { text: 'Carbs (g)', value: 'carbs' },
-      { text: 'Protein (g)', value: 'protein' },
+      { text: '商品类型', value: 'prizeTypeshow' },
+      { text: '优惠券活动码', value: 'couponActiveCodeshow' },
+      { text: '积分', value: 'creditshow' },
       { text: 'Actions', value: 'actions', sortable: false },
     ],
     desserts: [],
@@ -127,20 +129,25 @@ export default {
       carbs: 0,
       protein: 0,
     },
+    prizeTpyeItems: ['Credit', 'Coupon', 'Physical']
   }),
+
   created () {
     this.getProd()
   },
+
   computed: {
     formTitle () {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
   },
+
   watch: {
     dialog (val) {
       val || this.close()
     },
   },
+
   methods: {
 
     editItem (item) {
@@ -165,6 +172,29 @@ export default {
     save () {
       if (this.editedIndex > -1) {
         Object.assign(this.desserts[this.editedIndex], this.editedItem)
+        console.log('更改成功123')
+        console.log(this.desserts[this.editedIndex])
+        let data = this.desserts[this.editedIndex]
+        if (data.prizeType !== 'Credit') {
+          data.credit = null
+        } 
+        if (data.prizeType !== 'Coupon') {
+          data.couponActiveCode = null
+        }
+        let updateData = {
+          id: data.id,
+          name: data.name,
+          prizeType: data.prizeType,
+          couponActiveCode: data.couponActiveCode,
+          credit: data.credit,
+          categoryName: 'other',
+          brandName: 'other'
+        }
+        console.log(updateData)
+        updatePrizeItem(updateData).then(res => {
+          console.log(res.data)
+          this.getProd()
+        })
       } else {
         this.desserts.push(this.editedItem)
       }
@@ -173,26 +203,56 @@ export default {
 
 
 
-    // 获取活动列表
+    // 获取商品列表
     getProd() {
-      let data2 = {
-        Name: '积分'
+      let data = {
+        name: '积分'
       }
-      let data3 = {
-        Id : "08d97402-e17b-4a3c-8865-421be6e667d8"
-      }
-      getPrizeItemByName(data2).then(res2 => {
-        console.log(res2)
+      getPrizeItemByName(data).then(res => {
+        console.log(res)
       })
-      getPrizeItemById(data3).then(res3 => {
-        console.log(res3)
-      })
+
       let data4 = {
-        Page: 1,
-        Num: 50
+        PageIndex: 1,
+        PageSize : 50
       }
-      getPrizeItemList(data4).then(res4 => {
-        console.log(res4)
+      getPrizeItemAll(data4).then(res4 => {
+        console.log(res4.data.data)
+        this.desserts = res4.data.data
+        for (let i of this.desserts) {
+          console.log(i)
+          if (i.prizeType === 'Credit') {
+            i.prizeTypeshow = '积分商品'
+          } else if (i.prizeType === 'Coupon') {
+            i.prizeTypeshow = '优惠券兑换码'
+          } else if (i.prizeType === 'Physical') {
+            i.prizeTypeshow = '实物'
+          } 
+          if (i.couponActiveCode === '' || i.couponActiveCode === null) {
+            i.couponActiveCodeshow = '无'
+          } else {
+            i.couponActiveCodeshow = i.couponActiveCode
+          }
+          if (i.credit === '' || i.credit === null) {
+            i.creditshow = '无'
+          } else {
+            i.creditshow = i.credit
+          }
+        }
+      })
+    },
+
+
+    // 删除商品
+    delAct(val) {
+      // console.log(val.id)
+      let delData = {
+        id: val.id
+      }
+      console.log(delData)
+      deletePrizeItem(delData).then(res => {
+        console.log(res)
+        this.getProd()
       })
     },
     

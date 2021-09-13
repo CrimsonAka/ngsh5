@@ -389,6 +389,17 @@
         console.log(data)
         postActivity(data).then(res => {
           console.log(res)
+          console.log(res.data.data.id)
+          let a = res.data.data
+          let data = {
+            id: a.id,
+            name: a.name,
+            availableChannels: a.availableChannels,
+            lotteryDisplay: a.lotteryDisplay,
+            startTime: a.startTime,
+            endTime: a.endTime
+          }
+          this.$router.push({path: '/management/addPrizeTier', query: data})
         })
       },
       
