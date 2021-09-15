@@ -158,13 +158,13 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <!-- <v-icon
+        <v-icon
           small
           class="mr-2"
-          @click="editItem(item)"
+          @click="editItemProd(item)"
         >
           mdi-pencil
-        </v-icon> -->
+        </v-icon>
         <v-icon
           small
           class="mr-2"
@@ -188,8 +188,9 @@
     getPrizeItemAll, // 获取商品列表
     postPrizeTier,
     getPrizeTierActivity,
-    // updatePrizeTier // 修改
-    deletePrizeTier
+    updatePrizeTier, // 修改
+    deletePrizeTier,
+    getPrizeItemByIds
   } from '../../../api/module/backend'
 
 export default {
@@ -242,7 +243,7 @@ export default {
         value: 'name',
       },
       { text: '活动概率', value: 'percentage' },
-      { text: '活动奖品', value: 'prizeItemIds' },
+      { text: '活动奖品', value: 'prizeItemNames' },
       { text: '操作', value: 'actions', sortable: false },
     ],
     dessertsProd: [],
@@ -365,6 +366,22 @@ export default {
       })
       getPrizeTierActivity(data2).then(res => {
         console.log(res.data.data)
+        let a = res.data.data
+        for (let i of a) {
+          i.prizeItemNames = []
+          // console.log(i.prizeItemIds)
+          let Idsdata = {
+            Ids: i.prizeItemIds.toString()
+          }
+          // console.log(Idsdata)
+          getPrizeItemByIds(Idsdata).then(res2 => {
+            let b = res2.data.data
+            for (let j of b) {
+              i.prizeItemNames.push(j.name)
+            }
+            // console.log(i)
+          })
+        }
         this.dessertsProd = res.data.data
       })
       this.dialogProd = true
@@ -392,6 +409,12 @@ export default {
     saveProd () {
       if (this.editedIndexProd > -1) {
         Object.assign(this.dessertsProd[this.editedIndexProd], this.editedItemProd)
+        let a = this.dessertsProd[this.editedIndexProd]
+        console.log(a)
+        updatePrizeTier(a).then(res => {
+          console.log(res)
+          this.getAll()
+        })
       } else {
         let a = this.editedItemProd
 
@@ -409,6 +432,13 @@ export default {
       this.closeProd()
     },
 
+    editItemProd (item) {
+      console.log(item)
+      this.editedIndexProd = this.dessertsProd.indexOf(item)
+      this.editedItemProd = Object.assign({}, item)
+      this.dialogProdAdd = true
+    },
+
     getAll() {
         let data = {
           ActivityId : this.activityId
@@ -418,6 +448,21 @@ export default {
             this.dessertsProd = []
           } else {
             let a = res.data.data
+            for (let i of a) {
+              i.prizeItemNames = []
+              // console.log(i.prizeItemIds)
+              let Idsdata = {
+                Ids: i.prizeItemIds.toString()
+              }
+              // console.log(Idsdata)
+              getPrizeItemByIds(Idsdata).then(res2 => {
+                let b = res2.data.data
+                for (let j of b) {
+                  i.prizeItemNames.push(j.name)
+                }
+                // console.log(i)
+              })
+            }
             this.dessertsProd = a
           }
         })

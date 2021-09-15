@@ -97,3 +97,146 @@ name: "测试活动1"
   "endTime": "2021-09-12T21:11:04.578Z"
 }
 
+
+
+
+===================================================
+GetActivitylist
+[
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "name": "string",
+    "limit": 0,
+    "dailyLimit": 0,
+    "availableChannels": [
+      "string"
+    ],
+    "lotteryDisplay": "string",
+    "activityType": "string",
+    "startTime": "2021-09-14T02:08:32.827Z",
+    "endTime": "2021-09-14T02:08:32.827Z",
+    "activityCode": "string"
+  }
+]
+
+getActivity
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "name": "string",
+  "limit": 0,
+  "dailyLimit": 0,
+  "availableChannels": [
+    "string"
+  ],
+  "lotteryDisplay": "string",
+  "activityType": "string",
+  "startTime": "2021-09-14T02:08:32.753Z",
+  "endTime": "2021-09-14T02:08:32.753Z",
+  "activityCode": "string"
+}
+
+
+============================================
+getActivityUser
+{
+  "usedDraws": 0,
+  "todayUsedDraws": 0,
+  "remainingDraws": 0,
+  "attendanceDays": 0,
+  "sequentialAttendanceDays": 0,
+  "lastAttendanceDate": "2021-09-14T02:08:19.105Z",
+  "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "activityId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+}
+
+getActivityUse/user
+[
+  {
+    "usedDraws": 0,
+    "todayUsedDraws": 0,
+    "remainingDraws": 0,
+    "attendanceDays": 0,
+    "sequentialAttendanceDays": 0,
+    "lastAttendanceDate": "2021-09-14T02:05:58.210Z",
+    "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "activityId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  }
+]
+
+postActivityUser/BindAvailable
+[
+  {
+    "usedDraws": 0,
+    "todayUsedDraws": 0,
+    "remainingDraws": 0,
+    "attendanceDays": 0,
+    "sequentialAttendanceDays": 0,
+    "lastAttendanceDate": "2021-09-14T02:05:58.214Z",
+    "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "activityId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+  }
+]
+
+activityCode: "h89670792653"
+activityId: "08d9768b-9d91-453b-89cb-84cc341b04ef"
+activityType: "Lottery"
+attendanceDays: null
+availableChannels: Array(3)
+0: "Ngs"
+1: "NgsPlaza"
+2: "Alldays"
+length: 3
+__ob__: Observer {value: Array(3), dep: Dep, vmCount: 0}
+[[Prototype]]: Array
+endTime: null
+lastAttendanceDate: null
+lotteryDisplay: "Roulette"
+name: "测试活动1"
+remainingDraws: null
+sequentialAttendanceDays: null
+startTime: "2021-09-13T00:00:00"
+todayUsedDraws: 0
+usedDraws: 0
+userId: "08d9768f-5e69-4848-8dad-a8e0f7f7caba"
+
+
+
+
+activityCode: "h90997827133"
+activityId: "08d9774c-b972-4c6b-89e4-374a6c7d7b67"
+activityType: "Lottery"
+attendanceDays: null
+availableChannels: Array(3)
+color: "#952175"
+endTime: null
+lastAttendanceDate: null
+lotteryDisplay: "Roulette"
+name: "测试活动1"
+remainingDraws: 1
+sequentialAttendanceDays: null
+startTime: "2021-09-14T00:00:00"
+todayUsedDraws: 0
+usedDraws: 0
+userId: "08d9774a-dba4-420e-8ac7-c358b168ca88"
+
+
+activityId: null
+channelCode: "Ngs"
+date: "2021-09-14T15:54:45.488634"
+delivered: false
+id: "08d97754-eb19-425c-81b8-7fde3f92a874"
+isLucky: false
+lotteryDisplay: "Roulette"
+pickedTime: null
+pickedUp: false
+prizeItemId: null
+prizeTierId: null
+userId: "08d97754-c4de-41dd-8413-0ad400d0be56"
+
+activityId: actData.id,
+activityName: actData.name,
+lotteryDisplay: actData.lotteryDisplay,
+prizeTierId: tierData.id,
+prizeTierName: tierData.name,
+prizeItemId: itemData.id,
+prizeItemName: itemData.name

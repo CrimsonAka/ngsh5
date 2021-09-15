@@ -18,6 +18,8 @@ import adward from '../views/person/adward/adward.vue'
 import ngs from '../views/ngs/index.vue'
 import gua from '../views/ngs/choujiang/gua.vue'
 
+// import zhuan from '../views/ngs/choujiang/zhuan.vue'
+
 
 // 管理页面
 import maLayout from '../views/management/maLayout.vue'
@@ -66,6 +68,12 @@ const routes = [
         name: 'Gua',
         component: gua
       },
+      // 转盘
+      // {
+      //   path: '/home/zhuan',
+      //   name: 'Zhuan',
+      //   component: zhuan
+      // },
       // 地址管理
       {
         path: '/home/address',

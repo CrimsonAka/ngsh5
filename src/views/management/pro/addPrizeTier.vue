@@ -96,7 +96,7 @@
     updatePrizeTier, // 修改
     deletePrizeTier,
     getPrizeItemByIds,
-    getPrizeItemById
+    // getPrizeItemById
   } from '../../../api/module/backend'
   export default {
     name: 'AddPrizeTier',
@@ -121,7 +121,7 @@
         value: 'name',
       },
       { text: '活动概率', value: 'percentage' },
-      { text: '活动奖品', value: 'prizeItemIds' },
+      { text: '活动奖品', value: 'prizeItemNames' },
       { text: '操作', value: 'actions', sortable: false },
     ],
     dessertsProd: [],
@@ -171,20 +171,23 @@
             this.dessertsProd = []
           } else {
             let a = res.data.data
-            console.log(a)
             for (let i of a) {
+              i.prizeItemNames = []
               // console.log(i.prizeItemIds)
               let Idsdata = {
                 Ids: i.prizeItemIds.toString()
               }
-              console.log(Idsdata)
-              Idsdata = JSON.stringify(Idsdata)
-              Idsdata = JSON.parse(Idsdata)
+              // console.log(Idsdata)
               getPrizeItemByIds(Idsdata).then(res2 => {
-                console.log(res2)
+                let b = res2.data.data
+                for (let j of b) {
+                  i.prizeItemNames.push(j.name)
+                }
+                // console.log(i)
               })
             }
             this.dessertsProd = a
+            // console.log(a)
           }
         })
       },
@@ -194,18 +197,12 @@
       },
       // 获取商品列表
       getProd() {
-        let data1 = {
-          Id: '08d97660-0d30-4764-8e6b-6243ba916ce3'
-        }
-        getPrizeItemById(data1).then(res => {
-          console.log(res)
-        })
       let data4 = {
         PageIndex: 1,
         PageSize : 50
       }
       getPrizeItemAll(data4).then(res4 => {
-        console.log(res4.data.data)
+        // console.log(res4.data.data)
         let D = res4.data.data
         for (let i of D) {
           let a = {
@@ -220,27 +217,27 @@
       // 获取route
       getRoute() {
         let a = this.$route
-        console.log(a.query.id)
+        // console.log(a.query.id)
         this.activityData = a.query
         this.activityId = a.query.id
       },
       // 创建活动
-      addActivity() {
-        if (this.activityType !== 'Lottery') {
-          this.lotteryDisplay = 'None'
-        }
-        let data = {
-          name: this.name,
-          // limit: 0,
-          // dailyLimit: 0,
-          availableChannels: this.availableChannels,
-          lotteryDisplay: this.lotteryDisplay,
-          activityType: this.activityType,
-          startTime: this.startTime,
-          endTime: this.endTime
-        }
-        console.log(data)
-      },
+      // addActivity() {
+      //   if (this.activityType !== 'Lottery') {
+      //     this.lotteryDisplay = 'None'
+      //   }
+      //   let data = {
+      //     name: this.name,
+      //     // limit: 0,
+      //     // dailyLimit: 0,
+      //     availableChannels: this.availableChannels,
+      //     lotteryDisplay: this.lotteryDisplay,
+      //     activityType: this.activityType,
+      //     startTime: this.startTime,
+      //     endTime: this.endTime
+      //   }
+      //   // console.log(data)
+      // },
 
     editItemProd (item) {
       console.log(item)
@@ -250,7 +247,7 @@
     },
 
     deleteItem (item) {
-      console.log(item)
+      // console.log(item)
       let delData = {
         id: item.id
       }
@@ -272,11 +269,12 @@
       if (this.editedIndexProd > -1) {
         Object.assign(this.dessertsProd[this.editedIndexProd], this.editedItemProd)
         let a = this.dessertsProd[this.editedIndexProd]
+        console.log(a)
         updatePrizeTier(a).then(res => {
           console.log(res)
           this.getAll()
         })
-        console.log(a)
+        // console.log(a)
       } else {
         let a = this.editedItemProd
 

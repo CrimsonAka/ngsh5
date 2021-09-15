@@ -262,6 +262,7 @@
           let data = {
             userName: this.zc_username,
             password: this.zc_pwd,
+            // role: 'tester',
             role: 'manager'
           }
           postUser(data).then(res2 => {

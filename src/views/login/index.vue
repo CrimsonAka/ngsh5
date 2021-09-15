@@ -20,9 +20,8 @@
                 ref="yan"
                 label="验证码"
                 v-model="yan"
-                :rules="[
-                  () => !!yan || '请填写验证码'
-                ]" />
+                
+                />
                 <v-btn v-if="getBtn" small text color="primary" style="margin-top:15px" @click="getBtnYan">获取</v-btn>
                 <v-btn v-if="timeBtn" :disabled=true small text color="primary" style="margin-top:15px">重新获取 {{ time }} s</v-btn>
               </div>
@@ -168,7 +167,7 @@
           return false
         } else {
           this.time--
-          console.log(this.time)
+          // console.log(this.time)
           setTimeout(this.setTime, 1000)
         }
       },
@@ -210,8 +209,8 @@
             scope: 'eplus.test.scope openid',
             phone_number: this.phone,
             token: this.yan,
-            // login_channel: this.$route.query.login_channel
-            login_channel: 0
+            login_channel: this.$route.query.login_channel
+            // login_channel: 0
           }
           gettoken(data).then(res => {
             console.log(res.data)
@@ -225,7 +224,8 @@
                 console.log("userid:")
                 console.log(res2)
                 let info2 = {
-                  userId: res2.data.sub
+                  userId: res2.data.sub,
+                  login_channel: this.$route.query.login_channel
                 }
                 info2 = JSON.stringify(info2)
                 localStorage.setItem('user', info2)

@@ -487,7 +487,7 @@ export function postPrizeTier(data) {
   })
 }
 
-// 通过商品名 == 获取商品商品
+// 获取
 export function getPrizeTier(data) {
   return http({
     url: '/api/PrizeTier',

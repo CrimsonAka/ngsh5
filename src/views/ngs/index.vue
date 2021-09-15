@@ -29,13 +29,13 @@
             <div>
               <v-card-title
                 class="headline"
-                v-text="item.title"
+                v-text="item.name"
               ></v-card-title>
 
-              <v-card-subtitle style="font-size:14px;">次数：{{item.cishu}}</v-card-subtitle>
+              <v-card-subtitle style="font-size:14px;">次数：{{item.remainingDraws}}</v-card-subtitle>
               <v-card-actions>
-                <v-btn :elevation="4" text @click="patchBtn">兑换</v-btn>
-                <v-btn :elevation="4" text @click="postBtn">抽奖</v-btn>
+                <v-btn :elevation="4" text @click="patchBtn(item)">兑换</v-btn>
+                <v-btn :elevation="4" text @click="postBtn(item)">抽奖</v-btn>
               </v-card-actions>
               
             </div>
@@ -137,8 +137,10 @@ import {
   getUser, // 获取用户信息
   deleteUser, // 删除用户信息
   postActivityUserBindAvailable, // 为用户绑定所有可参与活动
-  // patchActivityUser, // 用户兑换抽奖次数
-  // postLottery, // 抽奖
+  patchActivityUser, // 用户兑换抽奖次数
+  postLottery, // 抽奖,
+  getActivityUserUser, // 获取用户正在参与的活动
+  getActivity, // 获取活动信息 
 } from '../../api/module/backend'
 import dayjs from 'dayjs'
 export default {
@@ -183,6 +185,12 @@ export default {
       sound: true,
       widgets: false,
       msg: {},
+      info: [
+        {
+          name: '活动名称',
+        }
+      ],
+      colorItem: ['#1F7087', '#952175']
   }),
   created () {
     // 组件创建完后获取数据，
@@ -190,6 +198,7 @@ export default {
     this.fetchData()
     // this.getLS()
     this.getActAvailable()
+    this.getUserinfo()
     // this.getAdward()
   },
   watch: {
@@ -204,37 +213,41 @@ export default {
       return user
     },
     // 抽奖按钮
-    postBtn() {
+    postBtn(val) {
       console.log('抽奖')
+      console.log(val)
       let user = this.getLocalStorageUser()
       console.log(user)
       let data = {
-        channelCode: '', // 渠道
-        lotteryDisplay: '', // 抽奖类型
+        channelCode: 'ngs', // 渠道
+        lotteryDisplay: val.lotteryDisplay, // 抽奖类型
         userId: user.userId, // 用户id
-        activityId: '', // 活动id
+        activityId: val.activityId, // 活动id
         count: 1 // 抽奖次数
       }
       console.log(data)
-      // postLottery(data).then(res => {
-      //   console.log(res)
-      // })
+      postLottery(data).then(res => {
+        console.log(res)
+        this.getActAvailable()
+      })
     },
     // 兑换次数
-    patchBtn() {
+    patchBtn(val) {
+      console.log(val)
       console.log('兑换抽奖次数')
       let user = this.getLocalStorageUser()
       let data = {
-        activityId: '',
+        activityId: val.activityId,
         userId: user.userId,
-        count: 0,
-        unitPrice: 0,
-        reason: "string"
+        count: 1,
+        unitPrice: 1,
+        reason: "抽奖兑换次数"
       }
       console.log(data)
-      // patchActivityUser(data).then(res => {
-      //   console.log(res)
-      // })
+      patchActivityUser(data).then(res => {
+        console.log(res)
+        this.getActAvailable()
+      })
     },
     // 删除用户
     deleteUserBtn() {
@@ -297,30 +310,77 @@ export default {
       })
     },
 
+    
+
     // 获取活动列表 并绑定所有活动
     getActAvailable() {
+      this.info = []
       let dj = dayjs().format('YYYY-MM-DD')
       let data = {
         startTime: dj,
-        AvailableChannels: ['Ngs']
+        AvailableChannels: 'ngs,ngsplaza,alldays'
       }
       data = JSON.stringify(data)
       data = JSON.parse(data)
-      console.log("获取活动列表api请求数据：")
-      console.log(data)
+      // console.log(data)
       getActivityAvailable(data).then(res => {
-        console.log('获取到的可以玩耍的活动：')
-        console.log(res)
+        console.log(res.data.data)
       })
       let user = this.getLocalStorageUser()
       let binddata = {
         userId: user.userId,
-        availableChannel: 'Ngs'
+        availableChannel: user.login_channel
       }
-      console.log(binddata)
+      // console.log(binddata)
       postActivityUserBindAvailable(binddata).then(res => {
         console.log(res)
+        let getData = {
+          userId: user.userId,
+          availableChannel: user.login_channel
+        }
+        getActivityUserUser(getData).then(res2 => {
+          // console.log(res2.data.data)
+          for (let i of res2.data.data) {
+            // console.log(i)
+            let actData = {
+              Id: i.activityId
+            }
+            getActivity(actData).then(actinfo => {
+              // console.log('活动信息：')
+              let a = actinfo.data.data
+              // console.log(a)
+              let j = {
+                activityId: a.id,
+                name: a.name,
+                availableChannels: a.availableChannels,
+                activityType: a.activityType,
+                lotteryDisplay: a.lotteryDisplay,
+                startTime: a.startTime,
+                endTime: a.endTime,
+                activityCode: a.activityCode,
+                userId: i.userId,
+                usedDraws: i.usedDraws,
+                todayUsedDraws: i.todayUsedDraws,
+                remainingDraws: i.remainingDraws,
+                attendanceDays: i.attendanceDays,
+                sequentialAttendanceDays: i.sequentialAttendanceDays,
+                lastAttendanceDate: i.lastAttendanceDate,
+                // color: this.colorItem[i]
+              }
+              // console.log(j)
+              this.info.push(j)
+              // console.log(this.info.length)
+              let c = this.info.length
+              let mod = c % 2
+              // console.log(mod)
+              this.info[c-1].color = this.colorItem[mod]
+              // console.log(this.info)
+              this.items = this.info
+            })
+          }
+        })
       })
+      
     },
 
     // 获取用户信息
