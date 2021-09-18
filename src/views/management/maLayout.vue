@@ -42,7 +42,7 @@
                       </v-list-item-avatar>
   
                       <v-list-item-content>
-                        <v-list-item-title>陈鸿炜</v-list-item-title>
+                        <!-- <v-list-item-title>陈鸿炜</v-list-item-title> -->
                         <v-list-item-subtitle>管理员</v-list-item-subtitle>
                       </v-list-item-content>
   
@@ -60,7 +60,7 @@
   
                   <v-divider></v-divider>
   
-                  <v-list>
+                  <!-- <v-list>
                     <v-list-item>
                       <v-list-item-action>
                         <v-switch v-model="message" color="purple"></v-switch>
@@ -74,13 +74,13 @@
                       </v-list-item-action>
                       <v-list-item-title>Enable hints</v-list-item-title>
                     </v-list-item>
-                  </v-list>
+                  </v-list> -->
   
                   <!-- 个人信息表按钮 -->
                   <v-card-actions>
                     <v-spacer></v-spacer>
   
-                    <v-btn text @click="menu = false">退 出</v-btn>
+                    <v-btn text @click="backBtn">退 出</v-btn>
                     <v-btn color="primary" text @click="menu = false">关 闭</v-btn>
                   </v-card-actions>
                 </v-card>
@@ -137,7 +137,7 @@
         </v-list>
 
         <!-- 选项二 -->
-        <v-list dense nav  v-if="this.submenu === '抽奖管理'">
+        <v-list dense nav  v-if="this.submenu === '活动管理'">
           <v-subheader style="font-size:17px; font-weight:700;">{{ this.submenu }}</v-subheader>
           <v-list-item-group v-model="item" color="blue">
             <v-list-item
@@ -183,6 +183,9 @@
 </template>
 
 <script>
+import {
+    getuserid // 获取用户id
+  } from '../../api/module/backend'
   export default {
     name: 'Layout',
 
@@ -191,14 +194,13 @@
       drawer: true,
       items: [
         { title: '用户管理', icon: 'mdi-view-dashboard' },
-        { title: '抽奖管理', icon: 'mdi-image' },
+        { title: '活动管理', icon: 'mdi-image' },
         { title: '奖品管理', icon: 'mdi-help-box' },
       ],
-      submenu: '用户管理',
+      submenu: '活动管理',
       dashboardmenu: [
-        { subtitle: 'Home1', id: 'person' },
-        { subtitle: '用户管理' },
-        { subtitle: 'Settings' }
+        // { subtitle: 'Home1', id: 'person' },
+        { subtitle: '添加管理', id: 'addManager' },
       ],
       photosmenu: [
         { subtitle: '添加活动', id: 'addActivity' },
@@ -253,6 +255,17 @@
           console.log(a)
           this.$router.push({ path: a })
         }
+      },
+      // 获取用户信息
+      getUser() {
+        getuserid().then(res2 => {
+          console.log('用户信息：')
+          console.log(res2)
+        })
+      },
+      // 登出按钮
+      backBtn() {
+        this.$router.push({ path: '/management/login' })
       },
     }
   }

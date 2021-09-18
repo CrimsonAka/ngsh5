@@ -18,7 +18,7 @@ import adward from '../views/person/adward/adward.vue'
 import ngs from '../views/ngs/index.vue'
 import gua from '../views/ngs/choujiang/gua.vue'
 
-// import zhuan from '../views/ngs/choujiang/zhuan.vue'
+import zhuan from '../views/ngs/choujiang/zhuan.vue'
 
 
 // 管理页面
@@ -29,11 +29,13 @@ import manageActivity from '../views/management/pro/manageActivity.vue'
 import manageProd from '../views/management/pro/manageProd.vue'
 import maLogin from '../views/management/login/maLogin.vue'
 import addPrizeTier from '../views/management/pro/addPrizeTier.vue'
+import addmanager from '../views/management/pro/addManager.vue'
 
 
 Vue.use(VueRouter)
 
 const routes = [
+  
   {
     path: '/home',
     name: 'Layout',
@@ -69,11 +71,11 @@ const routes = [
         component: gua
       },
       // 转盘
-      // {
-      //   path: '/home/zhuan',
-      //   name: 'Zhuan',
-      //   component: zhuan
-      // },
+      {
+        path: '/home/zhuan',
+        name: 'Zhuan',
+        component: zhuan
+      },
       // 地址管理
       {
         path: '/home/address',
@@ -96,7 +98,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/home/ngs'
+    redirect: '/login'
   },
   {
     path: '/about',
@@ -134,6 +136,11 @@ const routes = [
         component: addProd
       },
       {
+        path: '/management/addManager',
+        name: 'AddManager',
+        component: addmanager,
+      },
+      {
         path: '/management/addPrizeTier',
         name: 'AddPrizeTier',
         component: addPrizeTier
@@ -158,6 +165,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  mode: 'history',
+  // base: '/lottery',
   routes
 })
 

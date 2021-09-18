@@ -75,6 +75,26 @@
         确 定
       </v-btn>
     </v-form>
+
+    <!-- 提示框 -->
+      <v-snackbar
+        v-model="snackbar"
+        :timeout="timeout"
+        top
+      >
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="blue"
+            text
+            v-bind="attrs"
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+
   </div>
 </template>
 
@@ -88,6 +108,11 @@
     name: 'AddProd',
 
     data: () => ({
+      // 提示框
+      snackbar: false,
+      text: '请输入正确手机号！',
+      timeout: 1500,
+
       // 
       person: '添加商品',
 
@@ -191,6 +216,11 @@
         console.log(data)
         postPrizeItem(data).then(res => {
           console.log(res)
+          this.snackbar = true
+          this.text = '添加商品成功'
+          this.name = ''
+          this.prizeType = 'Credit'
+          this.credit = 0
         })
       },
       

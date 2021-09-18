@@ -52,8 +52,8 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-btn @click="getUserinfo">获取用户信息</v-btn>
-    <v-btn @click="deleteUserBtn">删除用户信息</v-btn>
+    <!-- <v-btn @click="getUserinfo">获取用户信息</v-btn>
+    <v-btn @click="deleteUserBtn">删除用户信息</v-btn> -->
 
     <!-- <router-link to="/">返回</router-link>
 
@@ -138,7 +138,7 @@ import {
   deleteUser, // 删除用户信息
   postActivityUserBindAvailable, // 为用户绑定所有可参与活动
   patchActivityUser, // 用户兑换抽奖次数
-  postLottery, // 抽奖,
+  // postLottery, // 抽奖,
   getActivityUserUser, // 获取用户正在参与的活动
   getActivity, // 获取活动信息 
 } from '../../api/module/backend'
@@ -219,17 +219,18 @@ export default {
       let user = this.getLocalStorageUser()
       console.log(user)
       let data = {
-        channelCode: 'ngs', // 渠道
+        channelCode: user.login_channel, // 渠道
         lotteryDisplay: val.lotteryDisplay, // 抽奖类型
         userId: user.userId, // 用户id
         activityId: val.activityId, // 活动id
         count: 1 // 抽奖次数
       }
       console.log(data)
-      postLottery(data).then(res => {
-        console.log(res)
-        this.getActAvailable()
-      })
+      this.$router.push({path: '/home/zhuan', query: data})
+      // postLottery(data).then(res => {
+      //   console.log(res)
+      //   this.getActAvailable()
+      // })
     },
     // 兑换次数
     patchBtn(val) {
@@ -429,7 +430,7 @@ export default {
     },
     fetchData () {
       this.personid = this.$route.params.id
-      this.msg = 'ngs'
+      // this.msg = 'ngs'
     },
   }
 }

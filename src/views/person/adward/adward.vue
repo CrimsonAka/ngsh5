@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <div>{{ person }}</div>
+  <div class="mr">
     <v-list two-line subheader>
       <v-subheader inset>历史中奖记录</v-subheader>
 
@@ -18,16 +17,37 @@
         <v-list-item-content>
           <v-list-item-title v-text="item.activityName"></v-list-item-title>
           <v-list-item-subtitle>{{item.prizeTierName}} - {{item.prizeItemName}}</v-list-item-subtitle>
+          <!-- <v-list-item-subtitle v-if="item.prizeType === 'Coupon'">{{item.couponActiveCode}}</v-list-item-subtitle> -->
         </v-list-item-content>
 
-        <v-list-item-action>
+        <!-- <v-list-item-action>
           <v-btn icon>
-            <v-icon color="grey lighten-1">mdi-clipboard-text</v-icon>
+            <v-icon color="grey lighten-1"  @click="crtlC(item)">mdi-clipboard-text</v-icon>
           </v-btn>
-        </v-list-item-action>
+        </v-list-item-action> -->
       </v-list-item>
 
     </v-list>
+
+
+    <!-- 提示框 -->
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      top
+    >
+      {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="blue"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -39,20 +59,24 @@ import {
   getActivity
   // getLotteryRecords
 } from '../../../api/module/backend'
+// import Clipboard from 'clipboard';
   export default {
     name: 'Adward',
 
     data: () => ({
       // 测试数据
       items: [
-        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖1', subtitle: '123', thirdtitle: '321' },
-        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖2', subtitle: '456', thirdtitle: '654' },
-        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖3', subtitle: '789', thirdtitle: '987' },
+        // { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖1', subtitle: '123', thirdtitle: '321' },
+        // { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖2', subtitle: '456', thirdtitle: '654' },
+        // { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖3', subtitle: '789', thirdtitle: '987' },
       ],
       // 
       person: '个人信息',
       // 获取本地数据
-      userMsg: {}
+      userMsg: {},
+      snackbar: false,
+      text: '请输入正确手机号！',
+      timeout: 1500,
     }),
 
     created() {
@@ -101,7 +125,10 @@ import {
                     prizeTierName: tierData.name,
                     prizeItemId: itemData.id,
                     prizeItemName: itemData.name,
-                    date: i.date
+                    prizeType: itemData.prizeType,
+                    date: i.date,
+                    credit: itemData.credit,
+                    couponActiveCode: itemData.couponActiveCode
                   }
                   // dataD.push(a)
                   if (itemData.credit === 0) {
@@ -120,7 +147,33 @@ import {
         //   console.log(res)
         // })
       },
+
+      // crtlC(val) {
+      //   console.log(val)
+      //   var clipboard = new Clipboard('#clip')
+      //   clipboard.on('success', e => {
+      //     this.snackbar = true
+      //     this.text = '复制成功'
+      //     console.log(e)
+      //     //  释放内存
+      //     clipboard.destory()
+      //   })
+      //   clipboard.on('error', e =>{
+      //     console.log(e)
+      //     // 不支持复制
+      //     console.log('该浏览器不支持复制')
+      //     // 释放内存
+      //     clipboard.destory()
+      //   })
+      // },
     }
 
   }
 </script>
+
+<style scoped>
+.mr{
+  margin-top: 20px;
+  margin-bottom: 45px;
+}
+</style>

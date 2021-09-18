@@ -14,7 +14,7 @@
         <v-col cols="12" sm="10" md="8" lg="6">
           <v-card ref="form">
             <v-card-title class="title font-weight-regular justify-space-between">
-              <span>登 录</span>
+              <span>管理员登陆</span>
             </v-card-title>
             <v-card-text>
               <v-text-field
@@ -34,7 +34,8 @@
             <v-divider class="mt-12"></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="zhuceBtn">注 册</v-btn>
+              <!-- <v-btn color="primary" text @click="zhuceBtn">注 册</v-btn> -->
+              <v-btn color="primary" text @click="bckBtn">返回用户端</v-btn>
               <v-btn color="primary" text @click="submit">登 录</v-btn>
             </v-card-actions>
           </v-card>
@@ -166,6 +167,9 @@
     },
 
     methods: {
+      bckBtn() {
+        this.$router.push({ path: '/login' })
+      },
       // 返回主页面
       backBtn() {
         this.zhuce = false
@@ -223,7 +227,7 @@
                 localStorage.setItem('user', info2)
                 // 后续获取到用户id之后自动获取用户数据信息并保存到localstorage中
                 this.$router.push({
-                  path: '/management/addactivity'
+                  path: '/management/manageActivity'
                 })
               }
             })

@@ -4,8 +4,9 @@ import axios from 'axios';
 const http = axios.create({
   // 设置超时时间
   timeout: 30000,
-  baseURL: 'http://eplusactivities-api:80'
-  // baseURL: 'http://localhost:52537'
+  // baseURL: 'http://eplusactivities-api:80'
+  baseURL: 'http://localhost:52537'
+  // baseURL: 'http://localhost:52537/eplusactivities'
   
   // 其他axios的配置详见：https://www.kancloud.cn/yunye/axios/234845
 });

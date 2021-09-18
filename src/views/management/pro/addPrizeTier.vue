@@ -84,7 +84,32 @@
         </v-icon>
       </template>
     </v-data-table>
-  </v-app>
+    <v-btn
+        color="warning"
+        @click="sureBtn"
+      >
+        确 定
+      </v-btn>
+
+      <!-- 提示框 -->
+      <v-snackbar
+        v-model="snackbar"
+        :timeout="timeout"
+        top
+      >
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="blue"
+            text
+            v-bind="attrs"
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </v-app>
   </div>
 </template>
 
@@ -102,6 +127,11 @@
     name: 'AddPrizeTier',
 
     data: () => ({
+      // 提示框
+      snackbar: false,
+      text: '请输入正确手机号！',
+      timeout: 1500,
+
       // 
       person: '添加活动奖品',
 
@@ -161,6 +191,10 @@
     },
 
     methods: {
+      // 返回
+      sureBtn() {
+        this.$router.push({ path: '/management/manageActivity' })
+      },
       // 获取所有档次奖励
       getAll() {
         let data = {
@@ -273,6 +307,8 @@
         updatePrizeTier(a).then(res => {
           console.log(res)
           this.getAll()
+          this.snackbar = true
+          this.text = "修改成功"
         })
         // console.log(a)
       } else {
@@ -287,6 +323,8 @@
         postPrizeTier(data).then(res => {
           console.log(res)
           this.getAll()
+          this.snackbar = true
+          this.text = "添加成功"
         })
       }
       this.closeProd()

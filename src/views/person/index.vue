@@ -23,13 +23,13 @@
 
         <v-list-item-content @click="itemBtn(item)">
           <v-list-item-title v-text="item.title"></v-list-item-title>
-          <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>
+          <v-list-item-subtitle v-show="item.title === '个人信息'">积分：{{item.subtitle}}</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-action>
-          <v-btn v-if="item.val === 0" icon @click="attendance(item)">
+          <!-- <v-btn v-if="item.val === 0" icon @click="attendance(item)">
             签到
-          </v-btn>
+          </v-btn> -->
           <v-btn v-if="item.val !== 0" icon @click="itemBtn(item)">
             <v-icon color="grey lighten-1">mdi-information</v-icon>
           </v-btn>
@@ -51,7 +51,7 @@ import {
     data: () => ({
       // 测试数据
       items: [
-        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '个人信息', subtitle: '积分：100, 次数：5', val: 0 },
+        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '个人信息', subtitle: '', val: 0 },
         { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '中奖记录', subtitle: '', val: 1 },
         { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: '地址管理', subtitle: '', val: 2 },
       ],
@@ -96,6 +96,7 @@ import {
         getUser(userId).then(res => {
           console.log('获取到的用户数据')
           console.log(res)
+          this.items[0].subtitle = res.data.data.credit
         })
       },
 

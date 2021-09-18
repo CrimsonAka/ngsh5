@@ -29,7 +29,7 @@
             </v-card-text>
             <v-divider class="mt-12"></v-divider>
             <v-card-actions>
-              <v-btn text @click="backBtn">返回</v-btn>
+              <v-btn text @click="backBtn">管理员登陆</v-btn>
               <v-spacer></v-spacer>
               <v-slide-x-reverse-transition>
                 <v-tooltip
@@ -52,7 +52,7 @@
               </v-slide-x-reverse-transition>
               <v-btn color="primary" text @click="submit">登录/注册</v-btn>
             </v-card-actions>
-            <div>{{ login_channel }}</div>
+            <!-- <div>{{ login_channel }}</div> -->
           </v-card>
         </v-col>
       </v-row>
@@ -141,11 +141,12 @@
       // 获取login_channel
       getLoginChannel() {
         this.login_channel = this.$route.query.login_channel
-        localStorage.setItem('channelCode', this.login_channel)
+        // this.login_channel = 'ngs'
+        // localStorage.setItem('channelCode', this.login_channel)
       },
       // 返回主页面
       backBtn() {
-        this.$router.push({ path: '/'})
+        this.$router.push({ path: '/management/login'})
       },
       // 获取验证码
       getBtnYan() {
@@ -209,7 +210,7 @@
             scope: 'eplus.test.scope openid',
             phone_number: this.phone,
             token: this.yan,
-            login_channel: this.$route.query.login_channel
+            login_channel: this.login_channel
             // login_channel: 0
           }
           gettoken(data).then(res => {
@@ -225,7 +226,7 @@
                 console.log(res2)
                 let info2 = {
                   userId: res2.data.sub,
-                  login_channel: this.$route.query.login_channel
+                  login_channel: this.login_channel
                 }
                 info2 = JSON.stringify(info2)
                 localStorage.setItem('user', info2)
