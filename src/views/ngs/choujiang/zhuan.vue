@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="note" :style ="note">
     <div>剩余抽奖次数：{{}}</div>
     <div>剩余抽奖次数：{{ a }}</div>
     <div class="turnplate_box">
@@ -9,25 +9,27 @@
       <canvas id="myCanvas02" width="150px" height="150px">抱歉！浏览器不支持。</canvas>
       <button id="tupBtn" class="turnplatw_btn" @click="startBtn"></button> 
     </div>
+    <!-- <div>{{ msg }}</div> -->
 
     <!-- 提示框 -->
-      <v-snackbar
-        v-model="snackbar"
-        :timeout="timeout"
-        top
-      >
-        {{ text }}
-        <template v-slot:action="{ attrs }">
-          <v-btn
-            color="blue"
-            text
-            v-bind="attrs"
-            @click="snackbar = false"
-          >
-            Close
-          </v-btn>
-        </template>
-      </v-snackbar>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      top
+      style="margin-top: 100px;"
+    >
+      {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="blue"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -41,6 +43,8 @@ import {
   getActivityUser
   // getLotteryRecords
 } from '../../../api/module/backend'
+
+
 
 export default {
   name: 'Zhuan',
@@ -59,7 +63,7 @@ export default {
       //中奖公告
       notice: null,
       //转盘初始化
-      color: ["#626262","#787878","rgba(0,0,0,0.5)","#DCC722","white","#FF4350"],
+      color: ["#f94144","#f3722c","rgba(250,250,250,0.5)","#f9c74f","white","#FF4350"],
       info: ["谢谢参与","1000","10","500","100","4999","1","20"],
       // info1: ['再接再厉', '元', '元', '淘金币', '元', '淘金币', '元', '淘金币']
 
@@ -67,6 +71,14 @@ export default {
       snackbar: false,
       text: '请输入正确手机号！',
       timeout: 1500,
+      msg: '123',
+      note: {
+        backgroundImage: "url(" + require("../../../assets/actbg.jpg") + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        height: '100%',
+        width: '100%',
+      },
     }
   },
   mounted() {
@@ -98,8 +110,8 @@ export default {
     // 开始按钮
     startBtn() {
       let data = this.$route.query
-      postLottery(data).then(res=> {
-        // console.log(res.data.data[0])
+      postLottery(data).then(res => {
+        console.log(res.data.data[0])
         let i = res.data.data[0]
         let itemId = {
           Id: i.prizeItemId
@@ -107,26 +119,42 @@ export default {
         let tierId = {
           Id: i.prizeTierId
         }
-        // console.log(itemId)
+        console.log(itemId)
         getPrizeItemById(itemId).then(res2 => {
           // console.log(res2.data.data)
           let itemData = res2.data.data
           getPrizeTier(tierId).then(res3 => {
             // console.log(res3.data.data)
             let tierData = res3.data.data
+            // this.msg = JSON.stringify(tierData)
             this.notice = tierData.name + itemData.name
             let itemid = itemData.id
             this.runCup(itemid)
             this.rotNum = this.rotNum + 1
             setTimeout(this.show,6000)
-            this.getData()
+            // this.getData()
           })
         })
+      }).catch(error => {
+        console.log(error.response)
+        let edata = error.response.data
+        if (edata.statusCode === 400) {
+          if (edata.errors === 'The user did not have enough chance to draw a lottery .') {
+            this.snackbar = true
+            this.text =  '剩余抽奖次数为0，请先兑换抽奖次数'
+          }
+          if (edata.errors === 'Sorry, the user had already achieved the daily maximum number of draws of this activity.') {
+            this.snackbar = true
+            this.text =  '今日已达抽奖上限，请明日再来'
+          }
+        }
       })
     },
     show(){
       this.snackbar = true
       this.text = this.notice
+      // this.snackbar = true
+      // this.text = '添加商品成功'
     },
     
     // 转盘旋转
@@ -142,6 +170,7 @@ export default {
       // b.css('-webkit-transform',degValue)      //Chrome和Safari
       // b.css('transform',degValue)
       b.style.transform = degValue
+      this.getData()
     },
 
     // 随机
@@ -230,7 +259,7 @@ export default {
         // 外圆
         function createCircle(){
           var startAngle = 0//扇形的开始弧度
-          var endAngle = 0//扇形的终止弧度
+          var endAngle = 0 //扇形的终止弧度
           // 画一个8等份扇形组成的圆形
           for (var i = 0; i< 8; i++){
             startAngle = Math.PI*(i/4-1/8)
@@ -319,10 +348,11 @@ export default {
 	font-size: 16px;
 	font-family: "Microsoft YaHei";
 }
+
 .turnplate_box{
 	width: 300px;
 	height: 300px;
-	margin: 100px auto;
+	margin: 50px auto;
 	position: relative; 
 }
 .turnplate_box canvas{

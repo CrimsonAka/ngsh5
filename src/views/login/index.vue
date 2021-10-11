@@ -29,7 +29,7 @@
             </v-card-text>
             <v-divider class="mt-12"></v-divider>
             <v-card-actions>
-              <v-btn text @click="backBtn">管理员登陆</v-btn>
+              <!-- <v-btn text @click="backBtn">管理员登陆</v-btn> -->
               <v-spacer></v-spacer>
               <v-slide-x-reverse-transition>
                 <v-tooltip
@@ -57,6 +57,7 @@
         </v-col>
       </v-row>
 
+    
 
       <!-- 提示框 -->
       <v-snackbar
@@ -85,7 +86,8 @@
   import { 
     getphone,
     gettoken,
-    getuserid
+    getuserid,
+    getUser
   } from '../../api/module/backend'
   export default {
     name: 'Login',
@@ -131,6 +133,7 @@
     created() {
       this.fetchData()
       this.getLoginChannel()
+      // this.getUserinfo()
     },
 
     watch: {
@@ -138,10 +141,42 @@
     },
 
     methods: {
+      // 判断用户是否已存在登录记录
+      getUserinfo(){
+        let user = localStorage.getItem('user')
+        user = JSON.parse(user)
+        // this.getLoginChannel()
+        let info2 = {
+          userId: user.userId,
+          login_channel: this.login_channel
+        }
+        info2 = JSON.stringify(info2)
+        localStorage.setItem('user', info2)
+        let userId = {
+          id: user.userId
+        }
+        console.log(userId)
+        getUser(userId).then(res => {
+          console.log('获取到的用户数据')
+          console.log(res)
+          if (res.status === 200) {
+            this.$router.push({
+              path: '/home/ngs'
+            })
+          }
+        })
+      },
       // 获取login_channel
       getLoginChannel() {
-        this.login_channel = this.$route.query.login_channel
-        // this.login_channel = 'ngs'
+        // this.login_channel = this.$route.query.login_channel
+        this.login_channel = 'test'
+        if (this.login_channel === undefined) {
+          this.$router.push({
+            path: '/management/login'
+          })
+        } else {
+          this.getUserinfo()
+        }
         // localStorage.setItem('channelCode', this.login_channel)
       },
       // 返回主页面

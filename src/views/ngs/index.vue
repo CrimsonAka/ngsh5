@@ -32,9 +32,9 @@
                 v-text="item.name"
               ></v-card-title>
 
-              <v-card-subtitle style="font-size:14px;">次数：{{item.remainingDraws}}</v-card-subtitle>
+              <v-card-subtitle style="font-size:14px;">剩余活动抽奖次数：{{item.remainingDraws}}</v-card-subtitle>
               <v-card-actions>
-                <v-btn :elevation="4" text @click="patchBtn(item)">兑换</v-btn>
+                <v-btn :elevation="4" text @click="patchBtn(item)">兑换抽奖次数</v-btn>
                 <v-btn :elevation="4" text @click="postBtn(item)">抽奖</v-btn>
               </v-card-actions>
               
@@ -46,7 +46,7 @@
               tile
               @click="activityBtn(item)"
             >
-              <v-img :src="item.src"></v-img>
+              <v-img :src="require('../../assets/activity.png')"></v-img>
             </v-avatar>
           </div>
         </v-card>
@@ -80,7 +80,7 @@
           </v-btn>
         </v-toolbar>
         <v-list three-line subheader>
-          <v-subheader>活动详情</v-subheader>
+          <!-- <v-subheader>活动详情</v-subheader>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>{{ msg.title }}</v-list-item-title>
@@ -89,8 +89,8 @@
             </v-list-item-content>
           </v-list-item>
           <v-btn style="margin:10px 10vw; color:white;" width="80vw" :color="msg.color">抽奖</v-btn>
-          <v-divider></v-divider>
-          <v-img :src="msg.src"></v-img>
+          <v-divider></v-divider> -->
+          <v-img :src="require('../../assets/actinfo.jpg')"></v-img>
         </v-list>
         
         <!-- <v-list three-line subheader>
@@ -131,6 +131,7 @@
 </template>
 
 <script>
+
 import {
   getuserid, // 获取用户id
   getActivityAvailable, // 获取活动列表  GetActivityAvailable
@@ -143,6 +144,8 @@ import {
   getActivity, // 获取活动信息 
 } from '../../api/module/backend'
 import dayjs from 'dayjs'
+
+
 export default {
   name: 'Playngs',
   data: () => ({
@@ -162,24 +165,7 @@ export default {
       randomNum: 0,
       randomNum2: 0,
       randomMsg: '',
-      items: [
-        {
-          color: '#1F7087',
-          src: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg',
-          title: '活动1',
-          subtitle: '转盘',
-          content: '',
-          cishu: '1'
-        },
-        {
-          color: '#952175',
-          src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
-          title: '活动2',
-          subtitle: '刮刮卡',
-          content: '',
-          cishu: '2'
-        },
-      ],
+      items: [],
       dialog: false,
       notifications: false,
       sound: true,
@@ -190,7 +176,7 @@ export default {
           name: '活动名称',
         }
       ],
-      colorItem: ['#1F7087', '#952175']
+      colorItem: ['#1F7087', '#952175'],
   }),
   created () {
     // 组件创建完后获取数据，
@@ -199,6 +185,7 @@ export default {
     // this.getLS()
     this.getActAvailable()
     this.getUserinfo()
+    // this.getPhoto()
     // this.getAdward()
   },
   watch: {
@@ -206,6 +193,9 @@ export default {
     '$route': 'fetchData'
   },
   methods: {
+    // getPhoto() {
+    //   this.picture1 = picture
+    // },
     // 获取localstorage信息
     getLocalStorageUser() {
       let user = localStorage.getItem('user')
@@ -241,7 +231,7 @@ export default {
         activityId: val.activityId,
         userId: user.userId,
         count: 1,
-        unitPrice: 1,
+        unitPrice: 1, // 兑换的积分
         reason: "抽奖兑换次数"
       }
       console.log(data)
@@ -250,6 +240,7 @@ export default {
         this.getActAvailable()
       })
     },
+
     // 删除用户
     deleteUserBtn() {
       let user = this.getLocalStorageUser()
@@ -316,10 +307,11 @@ export default {
     // 获取活动列表 并绑定所有活动
     getActAvailable() {
       this.info = []
+      let user = this.getLocalStorageUser()
       let dj = dayjs().format('YYYY-MM-DD')
       let data = {
         startTime: dj,
-        AvailableChannels: 'ngs,ngsplaza,alldays'
+        AvailableChannels: user.login_channel
       }
       data = JSON.stringify(data)
       data = JSON.parse(data)
@@ -327,7 +319,6 @@ export default {
       getActivityAvailable(data).then(res => {
         console.log(res.data.data)
       })
-      let user = this.getLocalStorageUser()
       let binddata = {
         userId: user.userId,
         availableChannel: user.login_channel

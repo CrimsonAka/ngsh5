@@ -111,6 +111,9 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    meta: {
+      pagetitle: '登录'
+    },
     component: Login
   },
 
@@ -166,7 +169,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  // base: '/lottery',
+  base: '/choujiang/',
   routes
 })
 

@@ -35,7 +35,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <!-- <v-btn color="primary" text @click="zhuceBtn">注 册</v-btn> -->
-              <v-btn color="primary" text @click="bckBtn">返回用户端</v-btn>
+              <!-- <v-btn color="primary" text @click="bckBtn">返回用户端</v-btn> -->
               <v-btn color="primary" text @click="submit">登 录</v-btn>
             </v-card-actions>
           </v-card>

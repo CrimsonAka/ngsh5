@@ -94,6 +94,15 @@
         ></v-checkbox>
       </v-row>
 
+      <v-subheader >活动设置：</v-subheader>
+      <v-row class="ml-1 mb-3">
+        <v-text-field
+          v-model="dailyLimit"
+          label="活动单日抽奖上限"
+          required
+        ></v-text-field>
+      </v-row>
+
       <v-subheader >时间设置：</v-subheader>
       <v-row class="ml-1 mb-3">
         <v-checkbox
@@ -315,6 +324,7 @@
       menu: false,
       endTime: null,
       menu2: false,
+      dailyLimit: null,
 
       // tabledata
       dialog: false,
@@ -376,6 +386,9 @@
         if (this.activityType !== 'Lottery') {
           this.lotteryDisplay = 'None'
         }
+        if (this.dailyLimit === 0) {
+          this.dailyLimit = null
+        }
         let data = {
           name: this.name,
           // limit: 0,
@@ -384,7 +397,8 @@
           lotteryDisplay: this.lotteryDisplay,
           activityType: this.activityType,
           startTime: this.startTime,
-          endTime: this.endTime
+          endTime: this.endTime,
+          dailyLimit: this.dailyLimit
         }
         console.log(data)
         postActivity(data).then(res => {
@@ -397,7 +411,8 @@
             availableChannels: a.availableChannels,
             lotteryDisplay: a.lotteryDisplay,
             startTime: a.startTime,
-            endTime: a.endTime
+            endTime: a.endTime,
+            dailyLimit: a.dailyLimit
           }
           this.$router.push({path: '/management/addPrizeTier', query: data})
         })

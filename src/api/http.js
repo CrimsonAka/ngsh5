@@ -6,6 +6,7 @@ const http = axios.create({
   timeout: 30000,
   // baseURL: 'http://eplusactivities-api:80'
   baseURL: 'http://localhost:52537'
+  // baseURL: 'https://www.ngs1685.com/'
   // baseURL: 'http://localhost:52537/eplusactivities'
   
   // 其他axios的配置详见：https://www.kancloud.cn/yunye/axios/234845

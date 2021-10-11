@@ -59,6 +59,16 @@
       </v-row>
       </div>
 
+      <div>
+      <v-row class="ml-1 mb-3">
+        <v-text-field
+          v-model="stock"
+          label="库存"
+          required
+        ></v-text-field>
+      </v-row>
+      </div>
+
       
       <v-btn
         color="error"
@@ -136,11 +146,13 @@
       availableChannels: [],
       prizeType: 'Credit',
       timeType: 'st',
+      stock: null,
 
       startTime: new Date().toISOString().substr(0, 10),
       menu: false,
       endTime: null,
       menu2: false,
+    
 
       // tabledata
       dialog: false,
@@ -205,13 +217,18 @@
         if (this.prizeType !== 'Coupon') {
           this.couponActiveCode = null
         }
+        this.stock = Number(this.stock)
+        if (this.stock === 0) {
+          this.stock = null
+        }
         let data = {
           name: this.name,
           prizeType: this.prizeType,
           couponActiveCode: this.couponActiveCode,
           credit: this.credit,
           categoryName: 'other',
-          brandName: 'other'
+          brandName: 'other',
+          stock: this.stock,
         }
         console.log(data)
         postPrizeItem(data).then(res => {
@@ -221,6 +238,7 @@
           this.name = ''
           this.prizeType = 'Credit'
           this.credit = 0
+          this.stock = null
         })
       },
       

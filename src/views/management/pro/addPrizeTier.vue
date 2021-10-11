@@ -43,6 +43,9 @@
                       <v-text-field v-model="editedItemProd.percentage" label="活动概率"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="8">
+                      <v-text-field v-model="editedItemProd.dailyLimit" label="单日上限"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="8">
                       <v-select
                         v-model="editedItemProd.prizeItemIds"
                         :items="states"
@@ -303,6 +306,11 @@
       if (this.editedIndexProd > -1) {
         Object.assign(this.dessertsProd[this.editedIndexProd], this.editedItemProd)
         let a = this.dessertsProd[this.editedIndexProd]
+        a.percentage = Number(a.percentage)
+        a.dailyLimit = Number(a.dailyLimit)
+        if (a.dailyLimit === 0) {
+          a.dailyLimit = null
+        }
         console.log(a)
         updatePrizeTier(a).then(res => {
           console.log(res)
@@ -318,7 +326,8 @@
           name: a.name,
           percentage: Number(a.percentage),
           activityId: this.activityId,
-          prizeItemIds: a.prizeItemIds
+          prizeItemIds: a.prizeItemIds,
+          dailyLimit: Number(a.dailyLimit)
         }
         postPrizeTier(data).then(res => {
           console.log(res)

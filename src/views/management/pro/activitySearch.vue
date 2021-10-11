@@ -99,7 +99,7 @@
     updatePrizeItem
   } from '../../../api/module/backend'
 export default {
-  name: 'ManageProd',
+  name: 'ActivitySearch',
   data: () => ({
     search: '',
     headers: [
